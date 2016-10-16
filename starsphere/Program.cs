@@ -14,7 +14,7 @@ namespace starsphere
         [STAThread]
         static void Main()
         {
-            using (var game = new openingwindow())
+            using (var game = new OpeningWindow())
                 game.Run();
         }
     }

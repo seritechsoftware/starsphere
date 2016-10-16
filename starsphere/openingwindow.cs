@@ -7,15 +7,31 @@ namespace starsphere
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class openingwindow : Game
+    public class OpeningWindow : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Vector2 iconPosition;
+        Texture2D iconTexture;
 
-        public openingwindow()
+        const string WINDOW_NAME = "Star Sphere 0.0.1";
+
+        public OpeningWindow()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferHeight = 400;
+            graphics.PreferredBackBufferWidth = 400;
             Content.RootDirectory = "Content";
+
+            iconPosition = new Vector2(0, 0);
+
+            //Pause Window Handlers
+            this.Activated += (sender, args) => { this.Window.Title = WINDOW_NAME; };
+            this.Deactivated += (sender, args) => { this.Window.Title = "PAUSED"; };
+
+            //Run at a fixed speed
+            this.IsFixedTimeStep = true;
+            this.graphics.SynchronizeWithVerticalRetrace = true;
         }
 
         /// <summary>
@@ -26,7 +42,6 @@ namespace starsphere
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
 
             base.Initialize();
         }
@@ -41,6 +56,8 @@ namespace starsphere
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            iconTexture = this.Content.Load<Texture2D>("defaulttex");
         }
 
         /// <summary>
@@ -59,12 +76,17 @@ namespace starsphere
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            if (IsActive)
+            {
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                    Exit();
 
-            // TODO: Add your update logic here
+                iconPosition.X += 1;
+                if (iconPosition.X > this.GraphicsDevice.Viewport.Width)
+                    iconPosition.X = 0;
 
-            base.Update(gameTime);
+                base.Update(gameTime);
+            }
         }
 
         /// <summary>
@@ -75,7 +97,9 @@ namespace starsphere
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            spriteBatch.Draw(iconTexture, iconPosition);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
