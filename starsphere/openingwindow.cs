@@ -12,15 +12,23 @@ namespace starsphere
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Vector2 iconPosition;
-        Texture2D iconTexture;
+
+        AnimatedSprite[] animatedStar;
+        Vector2[] starVector;
+
+        int screenHeight, screenWidth;
 
         const string WINDOW_NAME = "Star Sphere 0.0.1";
+        const int numStars = 100;
 
         public OpeningWindow()
         {
+            screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = 400;
-            graphics.PreferredBackBufferWidth = 400;
+            graphics.PreferredBackBufferHeight = screenHeight;
+            graphics.PreferredBackBufferWidth = screenWidth;
             Content.RootDirectory = "Content";
 
             iconPosition = new Vector2(0, 0);
@@ -56,8 +64,32 @@ namespace starsphere
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            Texture2D texture = Content.Load<Texture2D>("starflashtile");
+            System.Random rng = new System.Random();
 
-            iconTexture = this.Content.Load<Texture2D>("defaulttex");
+            animatedStar = new AnimatedSprite[numStars];
+            starVector = new Vector2[numStars];
+
+            for (int i = 0; i < numStars; i++)
+            {
+                int whichStar = rng.Next(0, 2);
+                if (whichStar == 0)
+                {
+                    animatedStar[i] = new AnimatedSprite(texture, 100, 6, 6, 0, 7, true);
+                    int startFrame = rng.Next(0, 8);
+                    animatedStar[i].ForceFrame(startFrame);
+                }
+                else
+                {
+                    animatedStar[i] = new AnimatedSprite(texture, 100, 6, 6, 8, 15, true);
+                    int startFrame = rng.Next(8, 16);
+                    animatedStar[i].ForceFrame(startFrame);
+                }
+                    
+
+                starVector[i] = new Vector2(rng.Next(0, screenWidth), rng.Next(0, screenHeight));
+            }
+
         }
 
         /// <summary>
@@ -81,10 +113,10 @@ namespace starsphere
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     Exit();
 
-                iconPosition.X += 1;
-                if (iconPosition.X > this.GraphicsDevice.Viewport.Width)
-                    iconPosition.X = 0;
-
+                for (int i = 0; i < numStars; i++)
+                {
+                    animatedStar[i].Update(gameTime);
+                }
                 base.Update(gameTime);
             }
         }
@@ -95,11 +127,12 @@ namespace starsphere
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            spriteBatch.Begin();
-            spriteBatch.Draw(iconTexture, iconPosition);
-            spriteBatch.End();
+            for (int i = 0; i < numStars; i++)
+            {
+                animatedStar[i].Draw(spriteBatch, starVector[i]);
+            }
 
             base.Draw(gameTime);
         }
