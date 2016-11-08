@@ -80,15 +80,20 @@ namespace starsphere
 
         public void Draw(SpriteBatch spriteBatch, Vector2 location)
         {
+            this.Draw(spriteBatch, location, Texture.Width / Columns, Texture.Height / Rows);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Vector2 location, int destWidth, int destHeight)
+        {
             int width = Texture.Width / Columns;
             int height = Texture.Height / Rows;
             int row = (int)((float)currentFrame / (float)Columns);
             int column = currentFrame % Columns;
 
             Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
-            Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
+            Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, destWidth, destHeight);
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White);
             spriteBatch.End();
         }

@@ -37,3 +37,9 @@
 /processorParam:TextureFormat=Color
 /build:starflashtile.png
 
+#begin titlefont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:titlefont.spritefont
+

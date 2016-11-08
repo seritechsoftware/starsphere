@@ -15,8 +15,13 @@ namespace starsphere
 
         AnimatedSprite[] animatedStar;
         Vector2[] starVector;
+        int[] starSize;
 
         int screenHeight, screenWidth;
+
+        SpriteFont titleFont;
+        const string TITLE_NAME = "STAR SPHERE";
+        const string TITLE_NAME_2 = "Version 0.0.1";
 
         const string WINDOW_NAME = "Star Sphere 0.0.1";
         const int numStars = 100;
@@ -65,10 +70,12 @@ namespace starsphere
 
             // TODO: use this.Content to load your game content here
             Texture2D texture = Content.Load<Texture2D>("starflashtile");
+            titleFont = Content.Load<SpriteFont>("titlefont");
             System.Random rng = new System.Random();
 
             animatedStar = new AnimatedSprite[numStars];
             starVector = new Vector2[numStars];
+            starSize = new int[numStars];
 
             for (int i = 0; i < numStars; i++)
             {
@@ -85,7 +92,7 @@ namespace starsphere
                     int startFrame = rng.Next(8, 16);
                     animatedStar[i].ForceFrame(startFrame);
                 }
-                    
+                starSize[i] = rng.Next(5, 20);
 
                 starVector[i] = new Vector2(rng.Next(0, screenWidth), rng.Next(0, screenHeight));
             }
@@ -131,8 +138,13 @@ namespace starsphere
 
             for (int i = 0; i < numStars; i++)
             {
-                animatedStar[i].Draw(spriteBatch, starVector[i]);
+                animatedStar[i].Draw(spriteBatch, starVector[i], starSize[i], starSize[i]);
             }
+
+            spriteBatch.Begin();
+            spriteBatch.DrawString(titleFont, TITLE_NAME, new Vector2(100, 100), Color.White);
+            spriteBatch.DrawString(titleFont, TITLE_NAME_2, new Vector2(100, 200), Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
