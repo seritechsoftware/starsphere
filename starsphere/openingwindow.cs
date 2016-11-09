@@ -1,18 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 namespace starsphere
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class OpeningWindow : Game
+    public class OpeningWindow : Screen
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        Vector2 iconPosition;
-
         AnimatedSprite[] animatedStar;
         Vector2[] starVector;
         int[] starSize;
@@ -22,52 +19,21 @@ namespace starsphere
         SpriteFont titleFont;
         const string TITLE_NAME = "STAR SPHERE";
         const string TITLE_NAME_2 = "Version 0.0.1";
-
-        const string WINDOW_NAME = "Star Sphere 0.0.1";
         const int numStars = 100;
 
-        public OpeningWindow()
+        Game thisGame;
+
+        public OpeningWindow(Game game)
         {
-            screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = screenHeight;
-            graphics.PreferredBackBufferWidth = screenWidth;
-            Content.RootDirectory = "Content";
-
-            iconPosition = new Vector2(0, 0);
-
-            //Pause Window Handlers
-            this.Activated += (sender, args) => { this.Window.Title = WINDOW_NAME; };
-            this.Deactivated += (sender, args) => { this.Window.Title = "PAUSED"; };
-
-            //Run at a fixed speed
-            this.IsFixedTimeStep = true;
-            this.graphics.SynchronizeWithVerticalRetrace = true;
-        }
-
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
-        {
-
-            base.Initialize();
+            thisGame = game;
         }
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        protected override void LoadContent()
+        public void LoadContent(ContentManager Content)
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
             // TODO: use this.Content to load your game content here
             Texture2D texture = Content.Load<Texture2D>("starflashtile");
             titleFont = Content.Load<SpriteFont>("titlefont");
@@ -99,13 +65,9 @@ namespace starsphere
 
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
-        protected override void UnloadContent()
+        public void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+
         }
 
         /// <summary>
@@ -113,18 +75,14 @@ namespace starsphere
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            if (IsActive)
-            {
-                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                    Exit();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                thisGame.Exit();
 
-                for (int i = 0; i < numStars; i++)
-                {
-                    animatedStar[i].Update(gameTime);
-                }
-                base.Update(gameTime);
+            for (int i = 0; i < numStars; i++)
+            {
+                animatedStar[i].Update(gameTime);
             }
         }
 
@@ -132,10 +90,8 @@ namespace starsphere
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            GraphicsDevice.Clear(Color.Black);
-
             for (int i = 0; i < numStars; i++)
             {
                 animatedStar[i].Draw(spriteBatch, starVector[i], starSize[i], starSize[i]);
@@ -145,8 +101,6 @@ namespace starsphere
             spriteBatch.DrawString(titleFont, TITLE_NAME, new Vector2(100, 100), Color.White);
             spriteBatch.DrawString(titleFont, TITLE_NAME_2, new Vector2(100, 200), Color.White);
             spriteBatch.End();
-
-            base.Draw(gameTime);
         }
     }
 }
