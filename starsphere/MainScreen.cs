@@ -14,7 +14,6 @@ namespace starsphere
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Vector2 iconPosition;
 
         Screen currentScreen;
 
@@ -23,17 +22,15 @@ namespace starsphere
 
         const string WINDOW_NAME = "Star Sphere 0.0.1";
 
-        int screenHeight, screenWidth;
-
         public MainScreen()
         {
             //Get Screen Size
-            screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            GameOptions.screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            GameOptions.screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
 
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferHeight = screenHeight;
-            graphics.PreferredBackBufferWidth = screenWidth;
+            graphics.PreferredBackBufferHeight = GameOptions.screenHeight;
+            graphics.PreferredBackBufferWidth = GameOptions.screenWidth;
             Content.RootDirectory = "Content";
 
 
@@ -50,6 +47,7 @@ namespace starsphere
             gameWindow = new SphereControl(this);
 
             currentScreen = openWindow;
+            GameOptions.currentScreenVal = GameOptions.screens.openingWindow;
         }
 
         /// <summary>
@@ -93,6 +91,17 @@ namespace starsphere
         protected override void Update(GameTime gameTime)
         {
             currentScreen.Update(gameTime);
+
+            //check for switch of current screen
+            switch (GameOptions.currentScreenVal)
+            {
+                case GameOptions.screens.openingWindow:
+                    currentScreen = openWindow;
+                    break;
+                case GameOptions.screens.sphereControl:
+                    currentScreen = gameWindow;
+                    break;
+            }
         }
 
         /// <summary>

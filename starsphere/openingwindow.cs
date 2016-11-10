@@ -14,8 +14,6 @@ namespace starsphere
         Vector2[] starVector;
         int[] starSize;
 
-        int screenHeight, screenWidth;
-
         SpriteFont titleFont;
         const string TITLE_NAME = "STAR SPHERE";
         const string TITLE_NAME_2 = "Version 0.0.1";
@@ -60,7 +58,7 @@ namespace starsphere
                 }
                 starSize[i] = rng.Next(5, 20);
 
-                starVector[i] = new Vector2(rng.Next(0, screenWidth), rng.Next(0, screenHeight));
+                starVector[i] = new Vector2(rng.Next(0, GameOptions.screenWidth), rng.Next(0, GameOptions.screenHeight));
             }
 
         }
@@ -79,6 +77,10 @@ namespace starsphere
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 thisGame.Exit();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter) || Mouse.GetState().LeftButton == ButtonState.Pressed)
+                GameOptions.currentScreenVal = GameOptions.screens.sphereControl;
+
 
             for (int i = 0; i < numStars; i++)
             {

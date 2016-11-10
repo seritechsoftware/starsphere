@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AnimatedSprite.cs" />
+    <Compile Include="GameOptions.cs" />
     <Compile Include="MainScreen.cs" />
     <Compile Include="OpeningWindow.cs" />
     <Compile Include="Program.cs" />

@@ -14,6 +14,7 @@ namespace starsphere
     class SphereControl : Screen
     {
         Game thisGame;
+        SpriteFont titleFont;
 
         public SphereControl(Game game)
         {
@@ -26,7 +27,7 @@ namespace starsphere
         /// </summary>
         public void LoadContent(ContentManager Content)
         {
-
+            titleFont = Content.Load<SpriteFont>("titlefont");
         }
 
         /// <summary>
@@ -56,6 +57,9 @@ namespace starsphere
         public void Draw(SpriteBatch spriteBatch)
         {
 
+            spriteBatch.Begin();
+            spriteBatch.DrawString(titleFont, "Initializing Star Sphere Control . . .", new Vector2(100, 100), Color.White);
+            spriteBatch.End();
         }
     }
 }
