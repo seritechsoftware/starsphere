@@ -15,16 +15,23 @@ namespace starsphere
     {
         Game thisGame;
         SpriteFont titleFont;
-        Texture2D borderTexture;
+        Texture2D horzBorderTex;
+        Texture2D vertBorderTex;
         Texture2D blankTex;
 
-        Rectangle viewScreen, scheduleList, detailList, mainControls;
+        KeyboardState previousState;
+
+        DisplayWindow viewScreen, scheduleList, detailList, mainControls;
+
+        int updateStage = 0;
+        int timeStamp = 0;
+        const int waitTime = 2000; //general timer wait for inputs
+
+        int animateTextTimer = 0;
 
         public SphereControl(Game game)
         {
             thisGame = game;
-
-            initializeWindows();
         }
 
         private void initializeWindows()
@@ -36,33 +43,15 @@ namespace starsphere
             int outerVertBorder = (int)fullHeight * 2 / 100;
             int innerVertBorder = (int)fullHeight * 2 / 100;
 
+            int borderWidth = horzBorderTex.Height;
 
-            //Size the windows correctly
-            viewScreen.Width = (int)fullWidth * 55 / 100;
-            viewScreen.Height = (int)fullHeight * 60 / 100;
+            //Setup the size and position of the windows correctly
+            viewScreen = new DisplayWindow(outerHorzBorder, outerVertBorder, (int)fullWidth * 55 / 100, (int)fullHeight * 60 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            detailList = new DisplayWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 60 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            scheduleList = new DisplayWindow(outerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 55 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            mainControls = new DisplayWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
 
-            detailList.Width = (int)fullWidth * 40 / 100;
-            detailList.Height = (int)fullHeight * 60 / 100;
-
-            scheduleList.Width = (int)fullWidth * 55 / 100;
-            scheduleList.Height = (int)fullHeight * 35 / 100;
-
-            mainControls.Width = (int)fullWidth * 40 / 100;
-            mainControls.Height = (int)fullHeight * 35 / 100;
-
-            //Position the windows correctly
-            viewScreen.X = outerHorzBorder;
-            viewScreen.Y = outerVertBorder;
-
-            detailList.X = outerHorzBorder + viewScreen.Width + innerHorzBorder;
-            detailList.Y = outerVertBorder;
-
-            scheduleList.X = outerHorzBorder;
-            scheduleList.Y = outerVertBorder + viewScreen.Height + innerVertBorder;
-
-            mainControls.X = outerHorzBorder + viewScreen.Width + innerHorzBorder;
-            mainControls.Y = outerVertBorder + viewScreen.Height + innerVertBorder;
-
+            previousState = Keyboard.GetState();
         }
 
         /// <summary>
@@ -73,8 +62,11 @@ namespace starsphere
         {
             titleFont = Content.Load<SpriteFont>("titlefont");
 
-            borderTexture = Content.Load<Texture2D>("borderstraight");
+            horzBorderTex = Content.Load<Texture2D>("borderstraight");
+            vertBorderTex = Content.Load<Texture2D>("vertborderstraight");
             blankTex = Content.Load<Texture2D>("blanktex");
+
+            initializeWindows();
         }
 
         /// <summary>
@@ -93,21 +85,78 @@ namespace starsphere
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            KeyboardState state = Keyboard.GetState();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || state.IsKeyDown(Keys.Escape))
                 thisGame.Exit();
+
+            switch (updateStage)
+            {
+                case 0:
+                    timeStamp += gameTime.ElapsedGameTime.Milliseconds;
+                    if (timeStamp > waitTime)
+                    {
+                        updateStage = 1;
+                        timeStamp = 0;
+                    }
+
+                    break;
+                case 1:
+                    if (state.IsKeyDown(Keys.Enter))
+                        updateStage = 2;
+
+                    break;
+                case 2:
+                    break;
+            }
+
+            previousState = state;
         }
 
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="spriteBatch">current sprite batch</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-
-            spriteBatch.Begin();
-            spriteBatch.DrawString(titleFont, "Initializing Star Sphere Control . . .", new Vector2(100, 100), Color.White);
-            spriteBatch.End();
-            DrawControlPanels(spriteBatch);
+            switch(updateStage)
+            {
+                case 0:
+                    spriteBatch.Begin();
+                    String initText = "Initializing Star Sphere Control";
+                    if (animateTextTimer == 1)
+                    {
+                        initText += " . ";
+                        animateTextTimer++;
+                    }
+                    else if (animateTextTimer == 2)
+                    {
+                        initText += " . . ";
+                        animateTextTimer++;
+                    }
+                    else if (animateTextTimer == 3)
+                    {
+                        initText += " . . .";
+                        animateTextTimer = 0;
+                    }
+                    else
+                    {
+                        animateTextTimer++;
+                    }
+                    spriteBatch.DrawString(titleFont, initText, new Vector2(100, 100), Color.White);
+                    spriteBatch.End();
+                    break;
+                case 1:
+                    spriteBatch.Begin();
+                    spriteBatch.DrawString(titleFont, "Star Sphere Control Initialized", new Vector2(100, 100), Color.White);
+                    spriteBatch.DrawString(titleFont, "Press Enter to Access Star Sphere Control . . .", new Vector2(100, 200), Color.White);
+                    spriteBatch.End();
+                    break;
+                case 2:
+                    DrawControlPanels(spriteBatch);
+                    break;
+            }
+            
+            
         }
 
 
@@ -116,14 +165,10 @@ namespace starsphere
         ///</summary>
         private void DrawControlPanels(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
-
-            spriteBatch.Draw(blankTex, viewScreen, Color.Gray);
-            spriteBatch.Draw(blankTex, scheduleList, Color.Gray);
-            spriteBatch.Draw(blankTex, detailList, Color.Gray);
-            spriteBatch.Draw(blankTex, mainControls, Color.Gray);
-
-            spriteBatch.End();
+            viewScreen.Draw(spriteBatch);
+            detailList.Draw(spriteBatch);
+            scheduleList.Draw(spriteBatch);
+            mainControls.Draw(spriteBatch);
         }
     }
 }
