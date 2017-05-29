@@ -27,10 +27,12 @@ namespace starsphere
             //Get Screen Size
             GameOptions.screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             GameOptions.screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            
 
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferHeight = GameOptions.screenHeight;
             graphics.PreferredBackBufferWidth = GameOptions.screenWidth;
+            graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
 
 

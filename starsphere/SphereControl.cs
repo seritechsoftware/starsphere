@@ -15,10 +15,54 @@ namespace starsphere
     {
         Game thisGame;
         SpriteFont titleFont;
+        Texture2D borderTexture;
+        Texture2D blankTex;
+
+        Rectangle viewScreen, scheduleList, detailList, mainControls;
 
         public SphereControl(Game game)
         {
             thisGame = game;
+
+            initializeWindows();
+        }
+
+        private void initializeWindows()
+        {
+            int fullWidth = GameOptions.screenWidth;
+            int fullHeight = GameOptions.screenHeight;
+            int outerHorzBorder = (int)fullWidth * 2 / 100;
+            int innerHorzBorder = (int)fullWidth * 1 / 100;
+            int outerVertBorder = (int)fullHeight * 2 / 100;
+            int innerVertBorder = (int)fullHeight * 2 / 100;
+
+
+            //Size the windows correctly
+            viewScreen.Width = (int)fullWidth * 55 / 100;
+            viewScreen.Height = (int)fullHeight * 60 / 100;
+
+            detailList.Width = (int)fullWidth * 40 / 100;
+            detailList.Height = (int)fullHeight * 60 / 100;
+
+            scheduleList.Width = (int)fullWidth * 55 / 100;
+            scheduleList.Height = (int)fullHeight * 35 / 100;
+
+            mainControls.Width = (int)fullWidth * 40 / 100;
+            mainControls.Height = (int)fullHeight * 35 / 100;
+
+            //Position the windows correctly
+            viewScreen.X = outerHorzBorder;
+            viewScreen.Y = outerVertBorder;
+
+            detailList.X = outerHorzBorder + viewScreen.Width + innerHorzBorder;
+            detailList.Y = outerVertBorder;
+
+            scheduleList.X = outerHorzBorder;
+            scheduleList.Y = outerVertBorder + viewScreen.Height + innerVertBorder;
+
+            mainControls.X = outerHorzBorder + viewScreen.Width + innerHorzBorder;
+            mainControls.Y = outerVertBorder + viewScreen.Height + innerVertBorder;
+
         }
 
         /// <summary>
@@ -28,6 +72,9 @@ namespace starsphere
         public void LoadContent(ContentManager Content)
         {
             titleFont = Content.Load<SpriteFont>("titlefont");
+
+            borderTexture = Content.Load<Texture2D>("borderstraight");
+            blankTex = Content.Load<Texture2D>("blanktex");
         }
 
         /// <summary>
@@ -59,6 +106,23 @@ namespace starsphere
 
             spriteBatch.Begin();
             spriteBatch.DrawString(titleFont, "Initializing Star Sphere Control . . .", new Vector2(100, 100), Color.White);
+            spriteBatch.End();
+            DrawControlPanels(spriteBatch);
+        }
+
+
+        ///<summary>
+        ///Draws the outlines of the control panels for the main game screen. 
+        ///</summary>
+        private void DrawControlPanels(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(blankTex, viewScreen, Color.Gray);
+            spriteBatch.Draw(blankTex, scheduleList, Color.Gray);
+            spriteBatch.Draw(blankTex, detailList, Color.Gray);
+            spriteBatch.Draw(blankTex, mainControls, Color.Gray);
+
             spriteBatch.End();
         }
     }
