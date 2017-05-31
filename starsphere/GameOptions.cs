@@ -8,7 +8,7 @@ namespace starsphere
 {
     static class GameOptions
     {
-        public enum screens { openingWindow, sphereControl}
+        public enum screens { openingWindow, loadSphereControl, sphereControl}
         static public int screenHeight, screenWidth;
         static public screens currentScreenVal;
     }

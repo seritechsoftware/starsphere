@@ -46,13 +46,13 @@ namespace starsphere
                 int whichStar = rng.Next(0, 2);
                 if (whichStar == 0)
                 {
-                    animatedStar[i] = new AnimatedSprite(texture, 100, 6, 6, 0, 7, true);
+                    animatedStar[i] = new AnimatedSprite(texture, 150, 6, 6, 0, 7, true);
                     int startFrame = rng.Next(0, 8);
                     animatedStar[i].ForceFrame(startFrame);
                 }
                 else
                 {
-                    animatedStar[i] = new AnimatedSprite(texture, 100, 6, 6, 8, 15, true);
+                    animatedStar[i] = new AnimatedSprite(texture, 150, 6, 6, 8, 15, true);
                     int startFrame = rng.Next(8, 16);
                     animatedStar[i].ForceFrame(startFrame);
                 }
@@ -79,7 +79,7 @@ namespace starsphere
                 thisGame.Exit();
 
             if (Keyboard.GetState().IsKeyDown(Keys.Enter) || Mouse.GetState().LeftButton == ButtonState.Pressed)
-                GameOptions.currentScreenVal = GameOptions.screens.sphereControl;
+                GameOptions.currentScreenVal = GameOptions.screens.loadSphereControl;
 
 
             for (int i = 0; i < numStars; i++)

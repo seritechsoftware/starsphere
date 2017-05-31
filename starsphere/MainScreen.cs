@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+//To Change Mouse Cursor
+using System.Windows.Forms;
+// For the NativeMethods helper class:
+using System.ComponentModel;
+using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace starsphere
 {
@@ -61,6 +66,7 @@ namespace starsphere
         protected override void Initialize()
         {
             base.Initialize();
+            
         }
 
         /// <summary>
@@ -99,6 +105,15 @@ namespace starsphere
             {
                 case GameOptions.screens.openingWindow:
                     currentScreen = openWindow;
+                    break;
+                case GameOptions.screens.loadSphereControl:
+                    this.IsMouseVisible = true;
+                    //Load new cursor for the game
+                    Cursor myCursor = NativeMethods.LoadCustomCursor(@"Content\hvcy_Option_2.cur");
+                    Form winForm = (Form)Form.FromHandle(this.Window.Handle);
+                    winForm.Cursor = myCursor;
+
+                    GameOptions.currentScreenVal = GameOptions.screens.sphereControl;
                     break;
                 case GameOptions.screens.sphereControl:
                     currentScreen = gameWindow;

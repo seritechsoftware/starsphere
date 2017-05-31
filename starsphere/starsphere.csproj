@@ -41,7 +41,9 @@
     <Compile Include="AnimatedSprite.cs" />
     <Compile Include="DisplayWindow.cs" />
     <Compile Include="GameOptions.cs" />
+    <Compile Include="MainControl.cs" />
     <Compile Include="MainScreen.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="OpeningWindow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,9 +55,13 @@
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\hvcy_Option_2.cur">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

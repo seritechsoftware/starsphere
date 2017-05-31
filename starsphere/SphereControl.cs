@@ -21,13 +21,17 @@ namespace starsphere
 
         KeyboardState previousState;
 
-        DisplayWindow viewScreen, scheduleList, detailList, mainControls;
+        DisplayWindow viewScreen, scheduleList, detailList;
+        MainControl mainControls;
 
         int updateStage = 0;
         int timeStamp = 0;
         const int waitTime = 2000; //general timer wait for inputs
 
+        int animateTextStage = 0;
         int animateTextTimer = 0;
+        int animateTextStageMax = 3;
+        const int animateTextWaitTime = 200;
 
         public SphereControl(Game game)
         {
@@ -39,19 +43,20 @@ namespace starsphere
             int fullWidth = GameOptions.screenWidth;
             int fullHeight = GameOptions.screenHeight;
             int outerHorzBorder = (int)fullWidth * 2 / 100;
-            int innerHorzBorder = (int)fullWidth * 1 / 100;
+            int innerHorzBorder = (int)fullWidth * 2 / 100;
             int outerVertBorder = (int)fullHeight * 2 / 100;
-            int innerVertBorder = (int)fullHeight * 2 / 100;
+            int innerVertBorder = (int)fullHeight * 3 / 100;
 
             int borderWidth = horzBorderTex.Height;
 
             //Setup the size and position of the windows correctly
-            viewScreen = new DisplayWindow(outerHorzBorder, outerVertBorder, (int)fullWidth * 55 / 100, (int)fullHeight * 60 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
-            detailList = new DisplayWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 60 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
-            scheduleList = new DisplayWindow(outerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 55 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
-            mainControls = new DisplayWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            viewScreen = new DisplayWindow(outerHorzBorder, outerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            detailList = new DisplayWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            scheduleList = new DisplayWindow(outerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            mainControls = new MainControl(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
 
             previousState = Keyboard.GetState();
+            
         }
 
         /// <summary>
@@ -66,7 +71,12 @@ namespace starsphere
             vertBorderTex = Content.Load<Texture2D>("vertborderstraight");
             blankTex = Content.Load<Texture2D>("blanktex");
 
+            //Set up dimensions of all windows
             initializeWindows();
+            //load textures into individual window classes
+            Texture2D buttonGridTex = Content.Load<Texture2D>("controlbuttontile");
+            mainControls.LoadTexture(buttonGridTex);
+
         }
 
         /// <summary>
@@ -92,21 +102,34 @@ namespace starsphere
             switch (updateStage)
             {
                 case 0:
+                    //delay a button press.
                     timeStamp += gameTime.ElapsedGameTime.Milliseconds;
                     if (timeStamp > waitTime)
                     {
                         updateStage = 1;
                         timeStamp = 0;
                     }
-
                     break;
                 case 1:
+                    //move on from loading screen when enter is pressed
                     if (state.IsKeyDown(Keys.Enter))
                         updateStage = 2;
-
                     break;
                 case 2:
+                    //MAIN UPDATE LOOP HERE:
+
                     break;
+            }
+
+            //do simple animation to the text so it looks like something is happening. 
+            animateTextTimer += gameTime.ElapsedGameTime.Milliseconds;
+            if (animateTextTimer > animateTextWaitTime)
+            {
+                animateTextStage++;
+                if (animateTextStage > animateTextStageMax)
+                    animateTextStage = 0;
+
+                animateTextTimer = 0;
             }
 
             previousState = state;
@@ -123,32 +146,29 @@ namespace starsphere
                 case 0:
                     spriteBatch.Begin();
                     String initText = "Initializing Star Sphere Control";
-                    if (animateTextTimer == 1)
-                    {
+                    if (animateTextStage == 1)
                         initText += " . ";
-                        animateTextTimer++;
-                    }
-                    else if (animateTextTimer == 2)
-                    {
+                    else if (animateTextStage == 2)
                         initText += " . . ";
-                        animateTextTimer++;
-                    }
-                    else if (animateTextTimer == 3)
-                    {
+                    else if (animateTextStage == 3)
                         initText += " . . .";
-                        animateTextTimer = 0;
-                    }
-                    else
-                    {
-                        animateTextTimer++;
-                    }
+
                     spriteBatch.DrawString(titleFont, initText, new Vector2(100, 100), Color.White);
                     spriteBatch.End();
                     break;
                 case 1:
                     spriteBatch.Begin();
                     spriteBatch.DrawString(titleFont, "Star Sphere Control Initialized", new Vector2(100, 100), Color.White);
-                    spriteBatch.DrawString(titleFont, "Press Enter to Access Star Sphere Control . . .", new Vector2(100, 200), Color.White);
+
+                    string enterText = "Press Enter to Access Star Sphere Control";
+                    if (animateTextStage == 1)
+                        enterText += " . ";
+                    else if (animateTextStage == 2)
+                        enterText += " . . ";
+                    else if (animateTextStage == 3)
+                        enterText += " . . .";
+                    spriteBatch.DrawString(titleFont, enterText, new Vector2(100, 200), Color.White);
+
                     spriteBatch.End();
                     break;
                 case 2:

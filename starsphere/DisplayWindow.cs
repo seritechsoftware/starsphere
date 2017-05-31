@@ -22,10 +22,10 @@ namespace starsphere
         public DisplayWindow(int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture)
         {
             windowRect = new Rectangle(x, y, width, height);
-            topBorderRect = new Rectangle(x-borderWidth, y-borderWidth, width+borderWidth, borderWidth);
-            leftBorderRect = new Rectangle(x-borderWidth, y-borderWidth, borderWidth, height+borderWidth*2);
-            rightBorderRect = new Rectangle(x + width, y-borderWidth, borderWidth, height + borderWidth*2);
-            bottomBorderRect = new Rectangle(x - borderWidth, y + height, width + borderWidth, borderWidth);
+            topBorderRect = new Rectangle(x-(int)borderWidth/2, y-borderWidth, width+borderWidth, borderWidth);
+            leftBorderRect = new Rectangle(x-borderWidth, y, borderWidth, height);
+            rightBorderRect = new Rectangle(x + width, y, borderWidth, height);
+            bottomBorderRect = new Rectangle(x - (int)borderWidth/2, y + height, width + borderWidth, borderWidth);
 
             windowTex = windowTexture;
             horzBorderTex = horzBorderTexture;
@@ -48,17 +48,17 @@ namespace starsphere
             }
         }
 
+        public Rectangle Window
+        {
+            get
+            {
+                return windowRect;
+            }
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
-
-            spriteBatch.Draw(windowTex, windowRect, Color.White);
-            spriteBatch.Draw(horzBorderTex, topBorderRect, Color.White);
-            spriteBatch.Draw(horzBorderTex, bottomBorderRect, Color.White);
-            spriteBatch.Draw(vertBorderTex, leftBorderRect, Color.White);
-            spriteBatch.Draw(vertBorderTex, rightBorderRect, Color.White);
-           
-            spriteBatch.End();
+            Draw(spriteBatch, true);
         }
 
         public void Draw(SpriteBatch spriteBatch, bool drawBorders)
@@ -68,12 +68,12 @@ namespace starsphere
             spriteBatch.Draw(windowTex, windowRect, Color.White);
             if (drawBorders)
             {
-                spriteBatch.Draw(horzBorderTex, topBorderRect, Color.White);
-                spriteBatch.Draw(horzBorderTex, bottomBorderRect, Color.White);
-                spriteBatch.Draw(vertBorderTex, leftBorderRect, Color.White);
-                spriteBatch.Draw(vertBorderTex, rightBorderRect, Color.White);
+                spriteBatch.Draw(horzBorderTex, topBorderRect, null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(horzBorderTex, bottomBorderRect, null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.FlipVertically, 0.0f);
+                spriteBatch.Draw(vertBorderTex, leftBorderRect, null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(vertBorderTex, rightBorderRect, null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0.0f);
             }
-            
+
             spriteBatch.End();
         }
     }
