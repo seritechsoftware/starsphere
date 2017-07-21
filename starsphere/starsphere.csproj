@@ -41,10 +41,10 @@
     <Compile Include="AnimatedSprite.cs" />
     <Compile Include="DisplayWindow.cs" />
     <Compile Include="GameOptions.cs" />
-    <Compile Include="MainControl.cs" />
+    <Compile Include="MainControlWindow.cs" />
     <Compile Include="MainScreen.cs" />
     <Compile Include="NativeMethods.cs" />
-    <Compile Include="OpeningWindow.cs" />
+    <Compile Include="OpeningScreen.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Screen.cs" />

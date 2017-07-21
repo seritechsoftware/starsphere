@@ -22,7 +22,7 @@ namespace starsphere
 
         Screen currentScreen;
 
-        OpeningWindow openWindow;
+        OpeningScreen openWindow;
         SphereControl gameWindow;
 
         const string WINDOW_NAME = "Star Sphere 0.0.1";
@@ -50,7 +50,7 @@ namespace starsphere
             this.graphics.SynchronizeWithVerticalRetrace = true;
 
 
-            openWindow = new OpeningWindow(this);
+            openWindow = new OpeningScreen(this);
             gameWindow = new SphereControl(this);
 
             currentScreen = openWindow;

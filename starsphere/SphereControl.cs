@@ -22,7 +22,8 @@ namespace starsphere
         KeyboardState previousState;
 
         DisplayWindow viewScreen, scheduleList, detailList;
-        MainControl mainControls;
+        MainControlWindow mainControls;
+        List<DisplayWindow> displayWindows;
 
         int updateStage = 0;
         int timeStamp = 0;
@@ -53,7 +54,14 @@ namespace starsphere
             viewScreen = new DisplayWindow(outerHorzBorder, outerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
             detailList = new DisplayWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
             scheduleList = new DisplayWindow(outerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
-            mainControls = new MainControl(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            mainControls = new MainControlWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+
+            //Set up list to cycle through for input commands
+            displayWindows = new List<DisplayWindow>();
+            displayWindows.Add(viewScreen);
+            displayWindows.Add(detailList);
+            displayWindows.Add(scheduleList);
+            displayWindows.Add(mainControls);
 
             previousState = Keyboard.GetState();
             
@@ -75,7 +83,7 @@ namespace starsphere
             initializeWindows();
             //load textures into individual window classes
             Texture2D buttonGridTex = Content.Load<Texture2D>("controlbuttontile");
-            mainControls.LoadTexture(buttonGridTex);
+            mainControls.LoadTexture(buttonGridTex, titleFont);
 
         }
 
@@ -95,13 +103,21 @@ namespace starsphere
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Update(GameTime gameTime)
         {
-            KeyboardState state = Keyboard.GetState();
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || state.IsKeyDown(Keys.Escape))
+            KeyboardState keyState = Keyboard.GetState();
+            MouseState mouseState = Mouse.GetState();
+
+            //Default exit kill switch-------------
+            //TODO: Remove before production
+
+            if (keyState.IsKeyDown(Keys.Escape))
                 thisGame.Exit();
+
+            //-------------------------------------
 
             switch (updateStage)
             {
                 case 0:
+                    //Very intro Loading Screen
                     //delay a button press.
                     timeStamp += gameTime.ElapsedGameTime.Milliseconds;
                     if (timeStamp > waitTime)
@@ -111,13 +127,38 @@ namespace starsphere
                     }
                     break;
                 case 1:
+                    //Very Intro Loading Screen
                     //move on from loading screen when enter is pressed
-                    if (state.IsKeyDown(Keys.Enter))
+                    if (keyState.IsKeyDown(Keys.Enter))
                         updateStage = 2;
                     break;
                 case 2:
+                    //Main Control Window
                     //MAIN UPDATE LOOP HERE:
 
+                    //Check for mouse movement and control------------------------------
+                    //Find which control window has the mouse cursor
+                    foreach (DisplayWindow d in displayWindows)
+                    {
+                        if (d.Window.Contains(mouseState.X, mouseState.Y))
+                        {
+                            d.MouseOver(mouseState);
+
+                            if (mouseState.LeftButton == ButtonState.Pressed)
+                            {
+                                d.MouseDown(mouseState);
+                            }
+                            else
+                            {
+                                d.MouseUp(mouseState);
+                            }
+                        }
+                        else
+                        {
+                            d.MouseOff(mouseState);
+                        }
+                    }
+              
                     break;
             }
 
@@ -132,7 +173,7 @@ namespace starsphere
                 animateTextTimer = 0;
             }
 
-            previousState = state;
+            previousState = keyState;
         }
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace starsphere
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class OpeningWindow : Screen
+    public class OpeningScreen : Screen
     {
         AnimatedSprite[] animatedStar;
         Vector2[] starVector;
@@ -21,7 +21,7 @@ namespace starsphere
 
         Game thisGame;
 
-        public OpeningWindow(Game game)
+        public OpeningScreen(Game game)
         {
             thisGame = game;
         }

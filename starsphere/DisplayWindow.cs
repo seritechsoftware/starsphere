@@ -19,17 +19,22 @@ namespace starsphere
         private Texture2D horzBorderTex;
         private Texture2D vertBorderTex;
 
+        private Color hoverColor;
+        private bool mouseOn;
+
         public DisplayWindow(int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture)
         {
             windowRect = new Rectangle(x, y, width, height);
-            topBorderRect = new Rectangle(x-(int)borderWidth/2, y-borderWidth, width+borderWidth, borderWidth);
+            topBorderRect = new Rectangle(x-(int)borderWidth, y-borderWidth, width + borderWidth*2, borderWidth);
             leftBorderRect = new Rectangle(x-borderWidth, y, borderWidth, height);
             rightBorderRect = new Rectangle(x + width, y, borderWidth, height);
-            bottomBorderRect = new Rectangle(x - (int)borderWidth/2, y + height, width + borderWidth, borderWidth);
+            bottomBorderRect = new Rectangle(x - (int)borderWidth, y + height, width + borderWidth*2, borderWidth);
 
             windowTex = windowTexture;
             horzBorderTex = horzBorderTexture;
             vertBorderTex = vertBorderTexture;
+            hoverColor = Color.White;
+            mouseOn = false;
         }
 
         public int Height
@@ -68,13 +73,40 @@ namespace starsphere
             spriteBatch.Draw(windowTex, windowRect, Color.White);
             if (drawBorders)
             {
-                spriteBatch.Draw(horzBorderTex, topBorderRect, null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 0.0f);
-                spriteBatch.Draw(horzBorderTex, bottomBorderRect, null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.FlipVertically, 0.0f);
-                spriteBatch.Draw(vertBorderTex, leftBorderRect, null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.None, 0.0f);
-                spriteBatch.Draw(vertBorderTex, rightBorderRect, null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0.0f);
+                spriteBatch.Draw(horzBorderTex, topBorderRect, null, hoverColor, 0.0f, new Vector2(0, 0), SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(horzBorderTex, bottomBorderRect, null, hoverColor, 0.0f, new Vector2(0, 0), SpriteEffects.FlipVertically, 0.0f);
+                spriteBatch.Draw(vertBorderTex, leftBorderRect, null, hoverColor, 0.0f, new Vector2(0, 0), SpriteEffects.None, 0.0f);
+                spriteBatch.Draw(vertBorderTex, rightBorderRect, null, hoverColor, 0.0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0.0f);
             }
 
             spriteBatch.End();
         }
+
+
+        //Placeholders for the children class methods.
+        public virtual void MouseOver(MouseState mouseState)
+        {
+            mouseOn = true;
+            hoverColor = Color.Green;
+        }
+
+        public virtual void MouseDown(MouseState mouseState)
+        {
+        }
+
+        public virtual void MouseUp(MouseState mouseState)
+        {
+        }
+
+        public virtual void MouseClick(MouseState mouseState)
+        { 
+        }
+
+        public virtual void MouseOff(MouseState mouseState)
+        {
+            mouseOn = false;
+            hoverColor = Color.White;
+        }
+
     }
 }
