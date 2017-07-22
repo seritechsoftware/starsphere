@@ -21,9 +21,13 @@ namespace starsphere
 
         KeyboardState previousState;
 
-        DisplayWindow viewScreen, scheduleList, detailList;
+        DisplayWindow viewScreen, detailList;
+        ScheduleListWindow scheduleList;
         MainControlWindow mainControls;
         List<DisplayWindow> displayWindows;
+
+        DateTime currentInGameTime;
+        int timeSlowFactor = 100;
 
         int updateStage = 0;
         int timeStamp = 0;
@@ -53,7 +57,7 @@ namespace starsphere
             //Setup the size and position of the windows correctly
             viewScreen = new DisplayWindow(outerHorzBorder, outerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
             detailList = new DisplayWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
-            scheduleList = new DisplayWindow(outerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            scheduleList = new ScheduleListWindow(outerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
             mainControls = new MainControlWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
 
             //Set up list to cycle through for input commands
@@ -84,7 +88,11 @@ namespace starsphere
             //load textures into individual window classes
             Texture2D buttonGridTex = Content.Load<Texture2D>("controlbuttontile");
             mainControls.LoadTexture(buttonGridTex, titleFont);
+            scheduleList.LoadTexture(titleFont);
 
+
+            currentInGameTime = new DateTime(2123, 1, 22, 8, 0, 0, 0, DateTimeKind.Unspecified);
+            scheduleList.DisplayedTime = currentInGameTime;
         }
 
         /// <summary>
@@ -158,7 +166,10 @@ namespace starsphere
                             d.MouseOff(mouseState);
                         }
                     }
-              
+
+                    //Update Current In Game Time from Elapsed Game Time
+                    currentInGameTime = currentInGameTime.AddMilliseconds(gameTime.ElapsedGameTime.Milliseconds * timeSlowFactor);
+                    scheduleList.DisplayedTime = currentInGameTime;
                     break;
             }
 
@@ -186,7 +197,7 @@ namespace starsphere
             {
                 case 0:
                     spriteBatch.Begin();
-                    String initText = "Initializing Star Sphere Control";
+                    String initText = "> Initializing Star Sphere Control";
                     if (animateTextStage == 1)
                         initText += " . ";
                     else if (animateTextStage == 2)
@@ -199,27 +210,27 @@ namespace starsphere
                     break;
                 case 1:
                     spriteBatch.Begin();
-                    spriteBatch.DrawString(titleFont, "Star Sphere Control Initialized", new Vector2(100, 100), Color.White);
+                    spriteBatch.DrawString(titleFont, "> Initializing Star Sphere Control . . .", new Vector2(100, 100), Color.White);
+                    spriteBatch.DrawString(titleFont, "> Star Sphere Control Initialized", new Vector2(100, 100 + titleFont.LineSpacing), Color.White);
 
-                    string enterText = "Press Enter to Access Star Sphere Control";
+                    string enterText = "> Press Enter to Access Star Sphere Control";
                     if (animateTextStage == 1)
                         enterText += " . ";
                     else if (animateTextStage == 2)
                         enterText += " . . ";
                     else if (animateTextStage == 3)
                         enterText += " . . .";
-                    spriteBatch.DrawString(titleFont, enterText, new Vector2(100, 200), Color.White);
+                    spriteBatch.DrawString(titleFont, enterText, new Vector2(100, 100 + titleFont.LineSpacing*2), Color.White);
 
                     spriteBatch.End();
                     break;
                 case 2:
+                    //Main Game Window ---------------------------------------
                     DrawControlPanels(spriteBatch);
+                    //Main Game Window ---------------------------------------
                     break;
             }
-            
-            
         }
-
 
         ///<summary>
         ///Draws the outlines of the control panels for the main game screen. 
