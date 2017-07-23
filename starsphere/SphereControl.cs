@@ -29,15 +29,6 @@ namespace starsphere
         DateTime currentInGameTime;
         int timeSlowFactor = 100;
 
-        int updateStage = 0;
-        int timeStamp = 0;
-        const int waitTime = 2000; //general timer wait for inputs
-
-        int animateTextStage = 0;
-        int animateTextTimer = 0;
-        int animateTextStageMax = 3;
-        const int animateTextWaitTime = 200;
-
         public SphereControl(Game game)
         {
             thisGame = game;
@@ -88,7 +79,10 @@ namespace starsphere
             //load textures into individual window classes
             Texture2D buttonGridTex = Content.Load<Texture2D>("controlbuttontile");
             mainControls.LoadTexture(buttonGridTex, titleFont);
-            scheduleList.LoadTexture(titleFont);
+
+            Texture2D buttonSchedGridTex = Content.Load<Texture2D>("schedulebuttontile");
+            Texture2D assestSchedGridTex = Content.Load<Texture2D>("scheduleassettile");
+            scheduleList.LoadTexture(buttonSchedGridTex, assestSchedGridTex, titleFont);
 
 
             currentInGameTime = new DateTime(2123, 1, 22, 8, 0, 0, 0, DateTimeKind.Unspecified);
@@ -122,67 +116,35 @@ namespace starsphere
 
             //-------------------------------------
 
-            switch (updateStage)
+            //Main Control Window
+            //MAIN UPDATE LOOP HERE:
+
+            //Check for mouse movement and control------------------------------
+            //Find which control window has the mouse cursor
+            foreach (DisplayWindow d in displayWindows)
             {
-                case 0:
-                    //Very intro Loading Screen
-                    //delay a button press.
-                    timeStamp += gameTime.ElapsedGameTime.Milliseconds;
-                    if (timeStamp > waitTime)
+                if (d.Window.Contains(mouseState.X, mouseState.Y))
+                {
+                    d.MouseOver(mouseState);
+
+                    if (mouseState.LeftButton == ButtonState.Pressed)
                     {
-                        updateStage = 1;
-                        timeStamp = 0;
+                        d.MouseDown(mouseState);
                     }
-                    break;
-                case 1:
-                    //Very Intro Loading Screen
-                    //move on from loading screen when enter is pressed
-                    if (keyState.IsKeyDown(Keys.Enter))
-                        updateStage = 2;
-                    break;
-                case 2:
-                    //Main Control Window
-                    //MAIN UPDATE LOOP HERE:
-
-                    //Check for mouse movement and control------------------------------
-                    //Find which control window has the mouse cursor
-                    foreach (DisplayWindow d in displayWindows)
+                    else
                     {
-                        if (d.Window.Contains(mouseState.X, mouseState.Y))
-                        {
-                            d.MouseOver(mouseState);
-
-                            if (mouseState.LeftButton == ButtonState.Pressed)
-                            {
-                                d.MouseDown(mouseState);
-                            }
-                            else
-                            {
-                                d.MouseUp(mouseState);
-                            }
-                        }
-                        else
-                        {
-                            d.MouseOff(mouseState);
-                        }
+                        d.MouseUp(mouseState);
                     }
-
-                    //Update Current In Game Time from Elapsed Game Time
-                    currentInGameTime = currentInGameTime.AddMilliseconds(gameTime.ElapsedGameTime.Milliseconds * timeSlowFactor);
-                    scheduleList.DisplayedTime = currentInGameTime;
-                    break;
+                }
+                else
+                {
+                    d.MouseOff(mouseState);
+                }
             }
 
-            //do simple animation to the text so it looks like something is happening. 
-            animateTextTimer += gameTime.ElapsedGameTime.Milliseconds;
-            if (animateTextTimer > animateTextWaitTime)
-            {
-                animateTextStage++;
-                if (animateTextStage > animateTextStageMax)
-                    animateTextStage = 0;
-
-                animateTextTimer = 0;
-            }
+            //Update Current In Game Time from Elapsed Game Time
+            currentInGameTime = currentInGameTime.AddMilliseconds(gameTime.ElapsedGameTime.Milliseconds * timeSlowFactor);
+            scheduleList.DisplayedTime = currentInGameTime;
 
             previousState = keyState;
         }
@@ -193,43 +155,8 @@ namespace starsphere
         /// <param name="spriteBatch">current sprite batch</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            switch(updateStage)
-            {
-                case 0:
-                    spriteBatch.Begin();
-                    String initText = "> Initializing Star Sphere Control";
-                    if (animateTextStage == 1)
-                        initText += " . ";
-                    else if (animateTextStage == 2)
-                        initText += " . . ";
-                    else if (animateTextStage == 3)
-                        initText += " . . .";
-
-                    spriteBatch.DrawString(titleFont, initText, new Vector2(100, 100), Color.White);
-                    spriteBatch.End();
-                    break;
-                case 1:
-                    spriteBatch.Begin();
-                    spriteBatch.DrawString(titleFont, "> Initializing Star Sphere Control . . .", new Vector2(100, 100), Color.White);
-                    spriteBatch.DrawString(titleFont, "> Star Sphere Control Initialized", new Vector2(100, 100 + titleFont.LineSpacing), Color.White);
-
-                    string enterText = "> Press Enter to Access Star Sphere Control";
-                    if (animateTextStage == 1)
-                        enterText += " . ";
-                    else if (animateTextStage == 2)
-                        enterText += " . . ";
-                    else if (animateTextStage == 3)
-                        enterText += " . . .";
-                    spriteBatch.DrawString(titleFont, enterText, new Vector2(100, 100 + titleFont.LineSpacing*2), Color.White);
-
-                    spriteBatch.End();
-                    break;
-                case 2:
-                    //Main Game Window ---------------------------------------
-                    DrawControlPanels(spriteBatch);
-                    //Main Game Window ---------------------------------------
-                    break;
-            }
+            //Main Game Window ---------------------------------------
+            DrawControlPanels(spriteBatch);
         }
 
         ///<summary>

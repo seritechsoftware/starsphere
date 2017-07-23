@@ -37,7 +37,7 @@ namespace starsphere
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferHeight = GameOptions.screenHeight;
             graphics.PreferredBackBufferWidth = GameOptions.screenWidth;
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
             Content.RootDirectory = "Content";
 
 
