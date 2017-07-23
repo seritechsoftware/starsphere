@@ -47,9 +47,15 @@
     <Compile Include="Game Control\NativeMethods.cs" />
     <Compile Include="Game Control\OpeningScreen.cs" />
     <Compile Include="Game Control\Program.cs" />
-    <Compile Include="Game Logic\GalaxyCatalog.cs" />
+    <Compile Include="Game Logic\GalacticGenerator.cs" />
+    <Compile Include="Game Logic\ClassificationTypes.cs" />
+    <Compile Include="Game Logic\Galaxy.cs" />
     <Compile Include="Game Logic\GalaxyViewer.cs" />
-    <Compile Include="Game Logic\SystemCatalog.cs" />
+    <Compile Include="Game Logic\Planet.cs" />
+    <Compile Include="Game Logic\PlanetViewer.cs" />
+    <Compile Include="Game Logic\PlanetZone.cs" />
+    <Compile Include="Game Logic\Randomizer.cs" />
+    <Compile Include="Game Logic\System.cs" />
     <Compile Include="Game Logic\SystemViewer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game Control\ScheduleListWindow.cs" />

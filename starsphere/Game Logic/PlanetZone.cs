@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace starsphere.Game_Logic
 {
-    class GalaxyCatalog
+    class PlanetZone
     {
     }
 }
