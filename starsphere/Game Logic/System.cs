@@ -14,10 +14,13 @@ namespace starsphere.Game_Logic
         private float solarLum;
         private int numberOfPlanets;
 
-        private string starName;
-        private ClassificationTypes.StarType starType;
+        private List<Planet> planets;
+        private Planet primeRingPlanet;
 
-        public System(string color, float mass, float size, float lum, int numPlanets, string name, ClassificationTypes.StarType type)
+        private string starName;
+        private Types.StarType starType;
+
+        public System(string color, float mass, float size, float lum, int numPlanets, string name, Types.StarType type)
         {
             //Used for randomly generated stars
             starColor = color;
@@ -28,6 +31,19 @@ namespace starsphere.Game_Logic
             starName = name;
             starType = type;
         }
+
+        public void PopulatePlanets(List<Planet> planetList)
+        {
+            planets = planetList;
+        }
+
+        public Planet PrimaryRingPlanet
+        {
+            get { return primeRingPlanet; }
+            set { primeRingPlanet = value; }
+        }
+
+        public string Name { get { return starName; } }
     }
 
 }

@@ -55,6 +55,7 @@
     <Compile Include="Game Logic\PlanetViewer.cs" />
     <Compile Include="Game Logic\PlanetZone.cs" />
     <Compile Include="Game Logic\Randomizer.cs" />
+    <Compile Include="Game Logic\Resource.cs" />
     <Compile Include="Game Logic\System.cs" />
     <Compile Include="Game Logic\SystemViewer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
