@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace starsphere.Game_Logic
+namespace Starphere.GameLogic
 {
     public static class Types
     {

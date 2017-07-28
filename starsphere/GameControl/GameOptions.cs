@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace starsphere
+namespace Starphere.GameControl
 {
     static class GameOptions
     {

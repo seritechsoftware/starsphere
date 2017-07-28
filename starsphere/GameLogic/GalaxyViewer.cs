@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace starsphere.Game_Logic
+namespace Starphere.GameLogic
 {
-    class SystemViewer
+    public class GalaxyViewer
     {
     }
 }

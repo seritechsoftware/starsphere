@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace starsphere.Game_Logic
+namespace Starphere.GameLogic
 {
-    static class Randomizer
+    public static class Randomizer
     {
         private static readonly Random getRandom = new Random();
         private static readonly object syncLock = new object();

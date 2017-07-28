@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace starsphere.Game_Logic
+namespace Starphere.GameLogic
 {
-    class PlanetZone
+    public class PlanetZone
     {
-        private List<Resource> resourceStashes;
+        public List<Resource> resourceStashes;
         private Types.Biome biome;
         private Planet planet;
 
@@ -18,5 +18,7 @@ namespace starsphere.Game_Logic
             biome = biomeClimate;
             planet = currentPlanet;
         }
+
+        public Types.Biome Biome { get { return biome; } }
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace starsphere.Game_Logic
+namespace Starphere.GameLogic
 {
-    class Planet
+    public class Planet
     {
         private Types.PlanetSize size;
         private Types.PlanetComp comp;
@@ -18,13 +18,13 @@ namespace starsphere.Game_Logic
         private int orbitalNum;
         private string name;
         private int numMoons;
-        private System system;
+        private StarSystem system;
 
         public List<PlanetZone> zones;
         public PlanetZone ringZone;
 
         public Planet(Types.PlanetSize planetSize, Types.PlanetComp planetComp, Types.Atmosphere planetAtmos, Types.Climate planetClim, Types.EmLevel planetEM,
-                        int orbitSize, int orbitNum, int numberOfMoons, string planetName, System currentSystem)
+                        int orbitSize, int orbitNum, int numberOfMoons, string planetName, StarSystem currentSystem)
         {
             size = planetSize;
             atmosphere = planetAtmos;
@@ -52,7 +52,7 @@ namespace starsphere.Game_Logic
         public int OrbitalNumber { get { return orbitalNum; } }
         public string PlanetName {  get { return name; } }
         public int NumberOfMoons { get { return numMoons; } }
-        public System PlanetarySystem { get { return system; } }
+        public StarSystem PlanetarySystem { get { return system; } }
 
     }
 }

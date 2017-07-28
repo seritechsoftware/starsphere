@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using System;
 
 
-namespace starsphere
+namespace Starphere.GameControl
 {
     /// <summary>
     /// This is the main type for your game.
@@ -21,7 +21,9 @@ namespace starsphere
         const string TITLE_NAME_2 = "Version 0.0.1";
         const int numStars = 100;
 
-        int updateStage = 0;
+        int updateStage = 2; //DEBUG: set to 2 to override into setting
+
+
         int timeStamp = 0;
         const int waitTime = 2000; //general timer wait for inputs
 
@@ -119,6 +121,7 @@ namespace starsphere
                         GameOptions.currentScreenVal = GameOptions.screens.loadSphereControl;
                     break;
                 case 3:
+
                     break;
             }
 

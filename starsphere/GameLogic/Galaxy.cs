@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Starphere.GameLogic
+{
+    public class Galaxy
+    {
+        public List<StarSystem> systems;
+        private int galacticWidth, galacticHeight;
+
+        public Galaxy(int width, int height, int numberOfSystemsToGenerate)
+        {
+            systems = new List<StarSystem>();
+            galacticHeight = height;
+            galacticWidth = width;
+
+            for(int i = 0; i < numberOfSystemsToGenerate; i++)
+            {
+                //Generate random system
+                systems.Add(GalacticGenerator.GenerateSystem(width, height));
+            }
+        }
+    }
+}

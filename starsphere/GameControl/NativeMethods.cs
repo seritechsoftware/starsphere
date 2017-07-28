@@ -10,7 +10,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Reflection;
 
-namespace starsphere
+namespace Starphere.GameControl
 {
     // Thanks Hans Passant!
     // http://stackoverflow.com/questions/4305800/using-custom-colored-cursors-in-a-c-windows-application

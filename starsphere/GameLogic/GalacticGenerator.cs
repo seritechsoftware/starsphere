@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace starsphere.Game_Logic
+namespace Starphere.GameLogic
 {
-    class GalacticGenerator
+    public static class GalacticGenerator
     {
-        public System GenerateSystem()
+
+        public static StarSystem GenerateSystem(int width, int height)
         {
             //Get type of star
             int maxNum = Enum.GetNames(typeof(Types.StarType)).Length;
@@ -88,7 +89,11 @@ namespace starsphere.Game_Logic
             //Create planets
             numPlanets = Randomizer.GetRandomNumber(0, 7);
 
-            System newSystem = new System(starColor, solarMass, solarSize, solarLum, numPlanets, starName, starType);
+            //Set coordinates
+            int x = Randomizer.GetRandomNumber(0, width);
+            int y = Randomizer.GetRandomNumber(0, height);
+
+            StarSystem newSystem = new StarSystem(starColor, solarMass, solarSize, solarLum, numPlanets, starName, starType, x, y);
 
             List<Planet> listOfPlanets = GeneratePlanets(newSystem, numPlanets);
             newSystem.PopulatePlanets(listOfPlanets);
@@ -97,7 +102,7 @@ namespace starsphere.Game_Logic
             return newSystem;
         }
 
-        public List<Planet> GeneratePlanets(System currentSystem, int numPlanets)
+        public static List<Planet> GeneratePlanets(StarSystem currentSystem, int numPlanets)
         {
             List<Planet> returnArray = new List<Planet>();
 
@@ -118,7 +123,7 @@ namespace starsphere.Game_Logic
             return returnArray;
         }
 
-        public Planet GenerateRandomPlanet(System currentSystem, int orbit, int orbitalNum)
+        public static Planet GenerateRandomPlanet(StarSystem currentSystem, int orbit, int orbitalNum)
         {
             //Generate basic planet features
             Types.PlanetSize size = (Types.PlanetSize)Randomizer.GetRandomNumber(0, Enum.GetNames(typeof(Types.PlanetSize)).Length - 1);
@@ -142,7 +147,7 @@ namespace starsphere.Game_Logic
             return returnVal;
         }
 
-        public PlanetZone GenerateRandomZone(Planet currentPlanet)
+        public static PlanetZone GenerateRandomZone(Planet currentPlanet)
         {
             Types.Biome climate = (Types.Biome)Randomizer.GetRandomNumber(0, Enum.GetNames(typeof(Types.Biome)).Length - 1);
 
@@ -158,7 +163,7 @@ namespace starsphere.Game_Logic
         }
 
         //Convert an orbital num to a roman numeral for nice displaying
-        public string NumToRomanNum(int num)
+        public static string NumToRomanNum(int num)
         {
             if (num >= 50)
                 return num.ToString();
@@ -183,11 +188,19 @@ namespace starsphere.Game_Logic
             return returnVal;
         }
 
-        public Planet ChoosePrimaryRingPlanet(List<Planet> planets)
+        public static Planet ChoosePrimaryRingPlanet(List<Planet> planets)
         {
             int num = planets.Count;
-            int randomNum = Randomizer.GetRandomNumber(1, num);
-            return planets.ElementAt(randomNum - 1);
+
+            if (num > 0)
+            {
+                int randomNum = Randomizer.GetRandomNumber(1, num);
+                return planets.ElementAt(randomNum - 1);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

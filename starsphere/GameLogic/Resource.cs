@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace starsphere.Game_Logic
+namespace Starphere.GameLogic
 {
-    class Resource
+    public class Resource
     {
         private int amount;
         private Types.NatResource resourceType;

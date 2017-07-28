@@ -13,7 +13,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Reflection;
 
-namespace starsphere
+namespace Starphere.GameControl
 {
     class MainScreen : Game
     {

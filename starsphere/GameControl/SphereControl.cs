@@ -7,12 +7,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using Starphere.GameLogic;
 
 
-namespace starsphere
+namespace Starphere.GameControl
 {
     class SphereControl : Screen
     {
+        //Visual Classes
         Game thisGame;
         SpriteFont titleFont;
         Texture2D horzBorderTex;
@@ -27,7 +29,13 @@ namespace starsphere
         List<DisplayWindow> displayWindows;
 
         DateTime currentInGameTime;
-        int timeSlowFactor = 100;
+        int timeSlowFactor = 100; //MAGIC NUMBER
+
+        //Game Logic Classes
+        Galaxy galaxy;
+        int galaxyWidth = 1000; //MAGIC NUMBER
+        int galaxyHeight = 1000; //MAGIC NUMBER
+        int numberOfSystems = 10; //MAGIC NUMBER
 
         public SphereControl(Game game)
         {
@@ -68,6 +76,7 @@ namespace starsphere
         /// </summary>
         public void LoadContent(ContentManager Content)
         {
+            //Load Visual Assets
             titleFont = Content.Load<SpriteFont>("titlefont");
 
             horzBorderTex = Content.Load<Texture2D>("borderstraight");
@@ -84,9 +93,12 @@ namespace starsphere
             Texture2D assestSchedGridTex = Content.Load<Texture2D>("scheduleassettile");
             scheduleList.LoadTexture(buttonSchedGridTex, assestSchedGridTex, titleFont);
 
-
             currentInGameTime = new DateTime(2123, 1, 22, 8, 0, 0, 0, DateTimeKind.Unspecified);
             scheduleList.DisplayedTime = currentInGameTime;
+
+
+            //Load Game Logic
+            galaxy = new Galaxy(galaxyWidth, galaxyHeight, numberOfSystems);
         }
 
         /// <summary>
