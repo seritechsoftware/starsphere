@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Starphere.GameControl
+namespace Starsphere.GameControl
 {
 #if WINDOWS || LINUX
     /// <summary>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Starphere.GameLogic
+namespace Starsphere.GameLogic
 {
     public class PlanetZone
     {

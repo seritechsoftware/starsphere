@@ -9,8 +9,8 @@
     <ProjectGuid>{7B2EFB7B-8557-419B-B719-826C65D7CB52}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>starsphere</RootNamespace>
-    <AssemblyName>starsphere</AssemblyName>
+    <RootNamespace>Starsphere</RootNamespace>
+    <AssemblyName>Starsphere</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="GameControl\AnimatedSprite.cs" />
+    <Compile Include="GameControl\DetailListWindow.cs" />
     <Compile Include="GameControl\DisplayWindow.cs" />
     <Compile Include="GameControl\GameOptions.cs" />
     <Compile Include="GameControl\IconHandler.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="GameControl\NativeMethods.cs" />
     <Compile Include="GameControl\OpeningScreen.cs" />
     <Compile Include="GameControl\Program.cs" />
+    <Compile Include="GameControl\ViewScreenWindow.cs" />
     <Compile Include="GameLogic\GalacticGenerator.cs" />
     <Compile Include="GameLogic\ClassificationTypes.cs" />
     <Compile Include="GameLogic\Galaxy.cs" />
@@ -56,7 +58,7 @@
     <Compile Include="GameLogic\PlanetZone.cs" />
     <Compile Include="GameLogic\Randomizer.cs" />
     <Compile Include="GameLogic\Resource.cs" />
-    <Compile Include="GameLogic\System.cs" />
+    <Compile Include="GameLogic\StarSystem.cs" />
     <Compile Include="GameLogic\SystemViewer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameControl\ScheduleListWindow.cs" />

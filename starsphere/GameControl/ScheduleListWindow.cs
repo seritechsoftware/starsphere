@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
-namespace Starphere.GameControl
+namespace Starsphere.GameControl
 {
     class ScheduleListWindow : DisplayWindow
     {
@@ -27,6 +27,10 @@ namespace Starphere.GameControl
         private Rectangle horzTimeLine;
 
         private int midLine;
+
+        private Rectangle timeBox;
+        private int textX;
+        private int textY;
 
         public ScheduleListWindow(int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
         {
@@ -53,6 +57,9 @@ namespace Starphere.GameControl
             //horzTimeLineLeft = new Rectangle(x, y + midLine , lineWidth, lineWidth);
             horzTimeLine = new Rectangle(x, y + midLine, width, lineWidth);
             //horzTimeLineRight = new Rectangle(x + width - lineWidth, y + midLine, lineWidth, lineWidth);
+
+            timeBox = new Rectangle(x, y, vertTimeLine.Right + lineWidth - x, lineWidth * 3 / 2);
+
         }
 
         public void LoadTexture(Texture2D buttonTex, Texture2D timeLineTex, SpriteFont font)
@@ -61,6 +68,9 @@ namespace Starphere.GameControl
             displayIcons = new IconHandler(timeLineTex, 3, 6);
 
             timeFont = font;
+
+            textX = base.Window.X + timeFont.LineSpacing / 2;
+            textY = base.Window.Y + timeFont.LineSpacing / 2;
         }
 
         public DateTime DisplayedTime
@@ -146,8 +156,8 @@ namespace Starphere.GameControl
 
 
             //Draw the time
-            int textX = base.Window.X;
-            int textY = base.Window.Y;
+            sourceRectangle = displayIcons.getIconRectangle(1, 3);
+            spriteBatch.Draw(displayIcons.iconTexture, timeBox, sourceRectangle, Color.White);
             spriteBatch.DrawString(timeFont, currentInGameTime.ToShortTimeString(), new Vector2(textX, textY), Color.White);
             spriteBatch.DrawString(timeFont, currentInGameTime.ToShortDateString(), new Vector2(textX, textY + timeFont.LineSpacing), Color.White);
 

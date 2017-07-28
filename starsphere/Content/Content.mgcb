@@ -127,3 +127,9 @@
 /processorParam:TextureFormat=Color
 /build:galaxyviewtiles.png
 
+#begin detaillist.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:detaillist.spritefont
+

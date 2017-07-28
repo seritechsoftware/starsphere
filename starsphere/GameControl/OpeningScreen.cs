@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using System;
 
 
-namespace Starphere.GameControl
+namespace Starsphere.GameControl
 {
     /// <summary>
     /// This is the main type for your game.

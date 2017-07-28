@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
-namespace Starphere.GameControl
+namespace Starsphere.GameControl
 {
-    class DisplayWindow
+    public class DisplayWindow
     {
         private Rectangle windowRect;
         private Rectangle topBorderRect, leftBorderRect, rightBorderRect, bottomBorderRect;
@@ -19,7 +19,9 @@ namespace Starphere.GameControl
         private Texture2D horzBorderTex;
         private Texture2D vertBorderTex;
 
-        private Color hoverColor;
+        public Color hoverColor;
+        public Color backgroundColor;
+        private Color defaultBackgroundColor;
         private bool mouseOn;
 
         public DisplayWindow(int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture)
@@ -34,32 +36,15 @@ namespace Starphere.GameControl
             horzBorderTex = horzBorderTexture;
             vertBorderTex = vertBorderTexture;
             hoverColor = Color.White;
+            backgroundColor = new Color(127, 51, 0);
+            defaultBackgroundColor = backgroundColor;
             mouseOn = false;
         }
 
-        public int Height
-        {
-            get
-            {
-                return windowRect.Height;
-            }
-        }
-
-        public int Width
-        {
-            get
-            {
-                return windowRect.Width;
-            }
-        }
-
-        public Rectangle Window
-        {
-            get
-            {
-                return windowRect;
-            }
-        }
+        public Color DefaultBackground { get { return defaultBackgroundColor; } }
+        public int Height { get { return windowRect.Height; } }
+        public int Width { get { return windowRect.Width; } }
+        public Rectangle Window { get { return windowRect; } }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -70,7 +55,7 @@ namespace Starphere.GameControl
         {
             spriteBatch.Begin();
 
-            spriteBatch.Draw(windowTex, windowRect, Color.White);
+            spriteBatch.Draw(windowTex, windowRect, backgroundColor);
             if (drawBorders)
             {
                 spriteBatch.Draw(horzBorderTex, topBorderRect, null, hoverColor, 0.0f, new Vector2(0, 0), SpriteEffects.None, 0.0f);

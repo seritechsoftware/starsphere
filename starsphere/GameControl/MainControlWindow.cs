@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
-namespace Starphere.GameControl
+namespace Starsphere.GameControl
 {
     class MainControlWindow : DisplayWindow
     {
@@ -34,8 +34,8 @@ namespace Starphere.GameControl
         {
             buttons = new Rectangle[buttonArrayHeight * buttonArrayWidth];
 
-            buttonWidth = (int)Window.Width / buttonArrayWidth;
-            buttonHeight = (int)Window.Height / buttonArrayHeight;
+            buttonWidth = Window.Width / buttonArrayWidth;
+            buttonHeight = Window.Height / buttonArrayHeight;
 
             for (int i = 0; i < buttonArrayWidth; i++)
             {

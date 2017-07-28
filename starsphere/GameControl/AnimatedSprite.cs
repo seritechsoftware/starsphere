@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 
-namespace Starphere.GameControl
+namespace Starsphere.GameControl
 {
     class AnimatedSprite
     {

@@ -7,10 +7,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
-using Starphere.GameLogic;
+using Starsphere.GameLogic;
 
 
-namespace Starphere.GameControl
+namespace Starsphere.GameControl
 {
     class SphereControl : Screen
     {
@@ -23,7 +23,8 @@ namespace Starphere.GameControl
 
         KeyboardState previousState;
 
-        DisplayWindow viewScreen, detailList;
+        ViewScreenWindow viewScreen;
+        DetailListWindow detailList;
         ScheduleListWindow scheduleList;
         MainControlWindow mainControls;
         List<DisplayWindow> displayWindows;
@@ -54,8 +55,8 @@ namespace Starphere.GameControl
             int borderWidth = horzBorderTex.Height;
 
             //Setup the size and position of the windows correctly
-            viewScreen = new DisplayWindow(outerHorzBorder, outerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
-            detailList = new DisplayWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            viewScreen = new ViewScreenWindow(outerHorzBorder, outerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            detailList = new DetailListWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
             scheduleList = new ScheduleListWindow(outerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
             mainControls = new MainControlWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
 
@@ -85,16 +86,26 @@ namespace Starphere.GameControl
 
             //Set up dimensions of all windows
             initializeWindows();
-            //load textures into individual window classes
+
+            //Load Control Window Textures
             Texture2D buttonGridTex = Content.Load<Texture2D>("controlbuttontile");
             mainControls.LoadTexture(buttonGridTex, titleFont);
 
+            //Load ScheduleList Textures
             Texture2D buttonSchedGridTex = Content.Load<Texture2D>("schedulebuttontile");
             Texture2D assestSchedGridTex = Content.Load<Texture2D>("scheduleassettile");
             scheduleList.LoadTexture(buttonSchedGridTex, assestSchedGridTex, titleFont);
 
             currentInGameTime = new DateTime(2123, 1, 22, 8, 0, 0, 0, DateTimeKind.Unspecified);
             scheduleList.DisplayedTime = currentInGameTime;
+
+            //Load Detail List Window Textures
+            SpriteFont detailFont = Content.Load<SpriteFont>("detaillist");
+            detailList.LoadTexture(detailFont);
+
+            //Load View Screen Window Textures
+            Texture2D galaxyViewScreenTex = Content.Load<Texture2D>("galaxyviewtiles");
+            viewScreen.LoadTexture(galaxyViewScreenTex, detailFont);
 
 
             //Load Game Logic
