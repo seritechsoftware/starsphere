@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using Starsphere.GameLogic;
 
 namespace Starsphere.GameControl
 {
@@ -14,17 +15,24 @@ namespace Starsphere.GameControl
     {
         private GameOptions.DisplayMode currentDisplay;
         private SpriteFont detailFont;
-        private Texture2D galaxyTextures;
+        private IconHandler galaxyIcons;
+        private Rectangle galaxyViewWindow; //window that only shows a portion of the galaxy
+
+        //Game Logic Variables
+        private Galaxy currentGalaxy;
 
         public ViewScreenWindow(int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
         {
             currentDisplay = GameOptions.DisplayMode.galaxyView;
+            galaxyViewWindow = new Rectangle(0, 0, width, height);
         }
 
-        public void LoadTexture(Texture2D galaxyViewTextures, SpriteFont font)
+        public void LoadContent(Texture2D galaxyViewTextures, SpriteFont font, Galaxy gal)
         {
-            galaxyTextures = galaxyViewTextures;
             detailFont = font;
+            currentGalaxy = gal;
+
+            galaxyIcons = new IconHandler(galaxyViewTextures, 3, 6);
         }
 
 
@@ -79,6 +87,44 @@ namespace Starsphere.GameControl
         public void DrawGalaxyView(SpriteBatch spriteBatch)
         {
             base.backgroundColor = Color.Black;
+            Rectangle sourceRect;
+
+            //Cycle through list of stars in the galaxy, find the ones in the current viewing window. 
+            if (currentGalaxy.systems.Count == 0)
+                return;
+
+            spriteBatch.Begin();
+            foreach (StarSystem s in currentGalaxy.systems)
+            {
+                //Check to see if in current viewing window. 
+                if (galaxyViewWindow.Contains(s.XCoord, s.YCoord))
+                {
+                    //draw this star
+                    switch (s.Type)
+                    {
+                        case Types.StarType.ClassO:
+                        case Types.StarType.ClassB:
+                        case Types.StarType.ClassA:
+                            sourceRect = galaxyIcons.getIconRectangle(1, 0);
+                            break;
+                        case Types.StarType.ClassF:
+                        case Types.StarType.ClassG:
+                            sourceRect = galaxyIcons.getIconRectangle(0, 0);
+                            break;
+                        case Types.StarType.ClassK:
+                        case Types.StarType.ClassM:
+                            sourceRect = galaxyIcons.getIconRectangle(2, 0);
+                            break;
+                        default:
+                            sourceRect = galaxyIcons.getIconRectangle(0, 0);
+                            break;
+                    }
+
+                    spriteBatch.Draw(galaxyIcons.iconTexture, new Vector2(s.XCoord - galaxyViewWindow.X, s.YCoord - galaxyViewWindow.Y), sourceRect, Color.White);
+                }
+            }
+
+            spriteBatch.End();
         }
 
         public void DrawSystemView(SpriteBatch spriteBatch)

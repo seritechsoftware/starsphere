@@ -77,6 +77,12 @@ namespace Starsphere.GameControl
         /// </summary>
         public void LoadContent(ContentManager Content)
         {
+            //Load Game Logic
+            galaxy = new Galaxy(galaxyWidth, galaxyHeight, numberOfSystems);
+
+
+            //---------------------------------------------------------------------
+
             //Load Visual Assets
             titleFont = Content.Load<SpriteFont>("titlefont");
 
@@ -105,11 +111,8 @@ namespace Starsphere.GameControl
 
             //Load View Screen Window Textures
             Texture2D galaxyViewScreenTex = Content.Load<Texture2D>("galaxyviewtiles");
-            viewScreen.LoadTexture(galaxyViewScreenTex, detailFont);
+            viewScreen.LoadContent(galaxyViewScreenTex, detailFont, galaxy);
 
-
-            //Load Game Logic
-            galaxy = new Galaxy(galaxyWidth, galaxyHeight, numberOfSystems);
         }
 
         /// <summary>
