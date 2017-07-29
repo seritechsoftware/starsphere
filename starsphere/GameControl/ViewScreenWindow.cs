@@ -21,6 +21,9 @@ namespace Starsphere.GameControl
         //Game Logic Variables
         private Galaxy currentGalaxy;
 
+
+        private int borderWidth = 32; //MAGIC NUMBER
+        private int moveSpeed = 5; //MAGIC NUMBER
         public ViewScreenWindow(int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
         {
             currentDisplay = GameOptions.DisplayMode.galaxyView;
@@ -39,6 +42,43 @@ namespace Starsphere.GameControl
         public override void MouseOver(MouseState mouseState)
         {
             base.MouseOver(mouseState);
+
+            //GALAXY VIEW WINDOW EVENTS
+            //Detect if the mouse is within the edge boundaries of the viewer to move it
+
+            if (currentDisplay == GameOptions.DisplayMode.galaxyView)
+            {
+                if (mouseState.X > Window.X && mouseState.X < Window.X + borderWidth)
+                {
+                    //Left border
+                    if (galaxyViewWindow.Left > 0)
+                        galaxyViewWindow.X -= moveSpeed;
+                }
+                if (mouseState.X > Window.Right - borderWidth && mouseState.X < Window.Right)
+                {
+                    //Right border
+                    if (galaxyViewWindow.Right < currentGalaxy.Width)
+                    {
+                        galaxyViewWindow.X += moveSpeed;
+                    }
+                }
+                if (mouseState.Y > Window.Top && mouseState.Y < Window.Top + borderWidth)
+                {
+                    //Top border
+                    if (galaxyViewWindow.Top > 0)
+                    {
+                        galaxyViewWindow.Y -= moveSpeed;
+                    }
+                }
+                if (mouseState.Y > Window.Bottom - borderWidth && mouseState.Y < Window.Bottom)
+                {
+                    //Bottom border
+                    if (galaxyViewWindow.Bottom < currentGalaxy.Height)
+                    {
+                        galaxyViewWindow.Y += moveSpeed;
+                    }
+                }
+            }
 
         }
 

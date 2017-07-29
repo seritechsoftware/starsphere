@@ -23,5 +23,8 @@ namespace Starsphere.GameLogic
                 systems.Add(GalacticGenerator.GenerateSystem(width, height));
             }
         }
+
+        public int Width { get { return galacticWidth; } }
+        public int Height {  get { return galacticHeight; } }
     }
 }

@@ -34,9 +34,9 @@ namespace Starsphere.GameControl
 
         //Game Logic Classes
         Galaxy galaxy;
-        int galaxyWidth = 1000; //MAGIC NUMBER
-        int galaxyHeight = 1000; //MAGIC NUMBER
-        int numberOfSystems = 10; //MAGIC NUMBER
+        int galaxyWidth = 5000; //MAGIC NUMBER
+        int galaxyHeight = 5000; //MAGIC NUMBER
+        int numberOfSystems = 100; //MAGIC NUMBER
 
         public SphereControl(Game game)
         {
