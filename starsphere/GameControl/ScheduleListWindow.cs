@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Starsphere.GameControl
 {
-    class ScheduleListWindow : DisplayWindow
+    public class ScheduleListWindow : DisplayWindow
     {
         private DateTime currentInGameTime;
 
@@ -32,7 +32,7 @@ namespace Starsphere.GameControl
         private int textX;
         private int textY;
 
-        public ScheduleListWindow(int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
+        public ScheduleListWindow(WindowController wc, int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(wc, x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
         {
             //Create buttons for speed control
             int buttonXStart = x + 3 * (int)(width / 4);

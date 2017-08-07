@@ -7,10 +7,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using Starsphere.GameLogic;
 
 namespace Starsphere.GameControl
 {
-    class DetailListWindow : DisplayWindow
+    public class DetailListWindow : DisplayWindow
     {
         private GameOptions.DetailMode currentDisplay;
 
@@ -18,7 +19,9 @@ namespace Starsphere.GameControl
         private Vector2 displayCorner;
         private Color fontColor;
 
-        public DetailListWindow(int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
+        private StarSystem currentSystem;
+
+        public DetailListWindow(WindowController wc, int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(wc, x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
         {
             base.backgroundColor = Color.Black;
         }
@@ -31,6 +34,8 @@ namespace Starsphere.GameControl
             fontColor = Color.LightGreen;
         }
 
+        public GameOptions.DetailMode DetailWindowMode { get { return currentDisplay; } set { currentDisplay = value; } }
+        public StarSystem DisplaySystem { get { return currentSystem; } set { currentSystem = value; } }
 
         public override void MouseOver(MouseState mouseState)
         {
@@ -89,7 +94,35 @@ namespace Starsphere.GameControl
 
         private void DrawStarInfo(SpriteBatch spriteBatch)
         {
-
+            if (currentSystem.Discovered)
+            {
+                PrintTextLines(spriteBatch, "Stellar Information Database",
+                "Star Name: " + currentSystem.Name,
+                "Type: " + currentSystem.Type.ToString(),
+                "Color: " + currentSystem.Color,
+                "Mass: " + currentSystem.Mass + " Solar Masses",
+                "Radius Size: " + currentSystem.Size + " Solar Radii",
+                "Luminosity: " + currentSystem.Luminosity.ToString(),
+                "Galactic Coordinates: (" + currentSystem.XCoord + ", " + currentSystem.YCoord + ")",
+                "Number of Planets: " + currentSystem.NumberOfPlanets,
+                "System Searched: " + currentSystem.Searched.ToString()
+                );
+            }
+            else
+            {
+                PrintTextLines(spriteBatch, "Stellar Information Database",
+                    "Star Name: " + currentSystem.Name,
+                    "Type: " + currentSystem.Type.ToString(),
+                    "Color: " + currentSystem.Color,
+                    "Mass: Unknown",
+                    "Radius Size: Unknown",
+                    "Luminosity: Unknown",
+                    "Galactic Coordinates: (" + currentSystem.XCoord + ", " + currentSystem.YCoord + ")",
+                    "Number of Planets: Unknown",
+                    "System Searched: " + currentSystem.Searched.ToString()
+                    );
+                }
+            
         }
 
         private void DrawPlanetInfo(SpriteBatch spriteBatch)

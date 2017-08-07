@@ -22,6 +22,10 @@ namespace Starsphere.GameLogic
         private string starName;
         private Types.StarType starType;
 
+        private bool selected;
+        private bool discovered;
+        private bool searched;
+
         public StarSystem(string color, float mass, float size, float lum, int numPlanets, string name, Types.StarType type, int x, int y)
         {
             //Used for randomly generated stars
@@ -35,6 +39,8 @@ namespace Starsphere.GameLogic
 
             galacticX = x;
             galacticY = y;
+
+            selected = false;
         }
 
         public void PopulatePlanets(List<Planet> planetList)
@@ -57,6 +63,10 @@ namespace Starsphere.GameLogic
         public int NumberOfPlanets { get { return numberOfPlanets; } }
         public int XCoord { get { return galacticX; } }
         public int YCoord { get { return galacticY; } }
+
+        public bool Selected { get { return selected; } set { selected = value; } }
+        public bool Discovered { get { return discovered; } set { discovered = value; } }
+        public bool Searched { get { return searched; } set { searched = value; } }
     }
 
 }

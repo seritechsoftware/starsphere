@@ -12,7 +12,7 @@ using Starsphere.GameLogic;
 
 namespace Starsphere.GameControl
 {
-    class SphereControl : Screen
+    class SphereControlScreen : Screen
     {
         //Visual Classes
         Game thisGame;
@@ -22,6 +22,8 @@ namespace Starsphere.GameControl
         Texture2D blankTex;
 
         KeyboardState previousState;
+
+        WindowController winCon;
 
         ViewScreenWindow viewScreen;
         DetailListWindow detailList;
@@ -38,7 +40,10 @@ namespace Starsphere.GameControl
         int galaxyHeight = 5000; //MAGIC NUMBER
         int numberOfSystems = 100; //MAGIC NUMBER
 
-        public SphereControl(Game game)
+        //Control Variables
+        bool leftClickTrigger = false;
+
+        public SphereControlScreen(Game game)
         {
             thisGame = game;
         }
@@ -54,11 +59,13 @@ namespace Starsphere.GameControl
 
             int borderWidth = horzBorderTex.Height;
 
+            winCon = new WindowController();
+
             //Setup the size and position of the windows correctly
-            viewScreen = new ViewScreenWindow(outerHorzBorder, outerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
-            detailList = new DetailListWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
-            scheduleList = new ScheduleListWindow(outerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
-            mainControls = new MainControlWindow(outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            viewScreen = new ViewScreenWindow(winCon, outerHorzBorder, outerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            detailList = new DetailListWindow(winCon, outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 59 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            scheduleList = new ScheduleListWindow(winCon, outerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 54 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
+            mainControls = new MainControlWindow(winCon, outerHorzBorder + viewScreen.Width + innerHorzBorder, outerVertBorder + viewScreen.Height + innerVertBorder, (int)fullWidth * 40 / 100, (int)fullHeight * 35 / 100, borderWidth, blankTex, horzBorderTex, vertBorderTex);
 
             //Set up list to cycle through for input commands
             displayWindows = new List<DisplayWindow>();
@@ -113,6 +120,8 @@ namespace Starsphere.GameControl
             Texture2D galaxyViewScreenTex = Content.Load<Texture2D>("galaxyviewtiles");
             viewScreen.LoadContent(galaxyViewScreenTex, detailFont, galaxy);
 
+            //Connect Window Controller
+            winCon.Initialize(viewScreen, scheduleList, detailList, mainControls);
         }
 
         /// <summary>
@@ -145,6 +154,12 @@ namespace Starsphere.GameControl
             //Main Control Window
             //MAIN UPDATE LOOP HERE:
 
+            //Check for mouse click -------------------------------------------
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                leftClickTrigger = true;
+            }
+
             //Check for mouse movement and control------------------------------
             //Find which control window has the mouse cursor
             foreach (DisplayWindow d in displayWindows)
@@ -153,14 +168,22 @@ namespace Starsphere.GameControl
                 {
                     d.MouseOver(mouseState);
 
-                    if (mouseState.LeftButton == ButtonState.Pressed)
+                    //Left Mouse Click Control
+                    if (mouseState.LeftButton == ButtonState.Released && leftClickTrigger == true)
+                    {
+                        d.MouseClick(mouseState);
+
+                        leftClickTrigger = false;
+                    }
+                    else if (mouseState.LeftButton == ButtonState.Pressed)
                     {
                         d.MouseDown(mouseState);
                     }
-                    else
+                    else if (mouseState.LeftButton == ButtonState.Released)
                     {
-                        d.MouseUp(mouseState);
+
                     }
+
                 }
                 else
                 {

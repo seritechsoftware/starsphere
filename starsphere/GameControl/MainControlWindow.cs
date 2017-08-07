@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Starsphere.GameControl
 {
-    class MainControlWindow : DisplayWindow
+    public class MainControlWindow : DisplayWindow
     {
         const int buttonArrayWidth = 5;
         const int buttonArrayHeight = 3;
@@ -30,7 +30,7 @@ namespace Starsphere.GameControl
         private int buttonClickedNum = -1; // -1 if nothing
 
         //use parent class constructor
-        public MainControlWindow(int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
+        public MainControlWindow(WindowController wc, int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(wc, x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
         {
             buttons = new Rectangle[buttonArrayHeight * buttonArrayWidth];
 

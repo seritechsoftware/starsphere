@@ -49,6 +49,7 @@
     <Compile Include="GameControl\OpeningScreen.cs" />
     <Compile Include="GameControl\Program.cs" />
     <Compile Include="GameControl\ViewScreenWindow.cs" />
+    <Compile Include="GameControl\WindowController.cs" />
     <Compile Include="GameLogic\GalacticGenerator.cs" />
     <Compile Include="GameLogic\ClassificationTypes.cs" />
     <Compile Include="GameLogic\Galaxy.cs" />
@@ -63,7 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameControl\ScheduleListWindow.cs" />
     <Compile Include="GameControl\Screen.cs" />
-    <Compile Include="GameControl\SphereControl.cs" />
+    <Compile Include="GameControl\SphereControlScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

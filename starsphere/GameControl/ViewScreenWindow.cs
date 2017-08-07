@@ -11,7 +11,7 @@ using Starsphere.GameLogic;
 
 namespace Starsphere.GameControl
 {
-    class ViewScreenWindow : DisplayWindow
+    public class ViewScreenWindow : DisplayWindow
     {
         private GameOptions.DisplayMode currentDisplay;
         private SpriteFont detailFont;
@@ -20,11 +20,12 @@ namespace Starsphere.GameControl
 
         //Game Logic Variables
         private Galaxy currentGalaxy;
-
+        private StarSystem selectedSystem;
 
         private int borderWidth = 32; //MAGIC NUMBER
         private int moveSpeed = 5; //MAGIC NUMBER
-        public ViewScreenWindow(int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
+
+        public ViewScreenWindow(WindowController wc, int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(wc, x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
         {
             currentDisplay = GameOptions.DisplayMode.galaxyView;
             galaxyViewWindow = new Rectangle(0, 0, width, height);
@@ -94,7 +95,44 @@ namespace Starsphere.GameControl
 
         public override void MouseClick(MouseState mouseState)
         {
+            switch (currentDisplay)
+            {
+                case GameOptions.DisplayMode.blankView:
 
+                    break;
+                case GameOptions.DisplayMode.galaxyView:
+                    //Did they click a star system
+                    Rectangle clickRect = galaxyIcons.getIconRectangle(0, 0);
+                    foreach (StarSystem s in currentGalaxy.systems)
+                    {
+                        //Check to see if in current viewing window. 
+                        if (galaxyViewWindow.Contains(s.XCoord, s.YCoord))
+                        {
+                            //switch mousecoords to window coords
+                            Vector2 mouseClickPos = new Vector2(galaxyViewWindow.X + mouseState.X, galaxyViewWindow.Y + mouseState.Y);
+                            clickRect.Location = new Point(s.XCoord, s.YCoord);
+                            if (clickRect.Contains(mouseClickPos))
+                            {
+                                if (selectedSystem != null)
+                                    selectedSystem.Selected = false;
+                                s.Selected = true;
+                                selectedSystem = s;
+
+                                //Display SelectedStar
+                                WindowCon.ChangeDetailListMode(GameOptions.DetailMode.starInfo);
+                                WindowCon.ChangeDetailStar(selectedSystem);
+                            }
+
+                        }
+                    }
+                    break;
+                case GameOptions.DisplayMode.systemView:
+
+                    break;
+                case GameOptions.DisplayMode.planetView:
+
+                    break;
+            }
         }
 
         public new void Draw(SpriteBatch spriteBatch)
@@ -117,6 +155,8 @@ namespace Starsphere.GameControl
                     DrawPlanetView(spriteBatch);
                     break;
             }
+
+            base.DrawBorders(spriteBatch);
         }
 
         public void DrawBlankView(SpriteBatch spriteBatch)
@@ -160,7 +200,14 @@ namespace Starsphere.GameControl
                             break;
                     }
 
-                    spriteBatch.Draw(galaxyIcons.iconTexture, new Vector2(s.XCoord - galaxyViewWindow.X, s.YCoord - galaxyViewWindow.Y), sourceRect, Color.White);
+                    Vector2 coords = new Vector2(s.XCoord - galaxyViewWindow.X, s.YCoord - galaxyViewWindow.Y);
+                    spriteBatch.Draw(galaxyIcons.iconTexture, coords, sourceRect, Color.White);
+
+                    if (s.Selected)
+                    {
+                        sourceRect = galaxyIcons.getIconRectangle(0, 1);
+                        spriteBatch.Draw(galaxyIcons.iconTexture, coords, sourceRect, Color.White);
+                    }
                 }
             }
 

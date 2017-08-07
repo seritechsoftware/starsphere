@@ -99,6 +99,14 @@ namespace Starsphere.GameLogic
             newSystem.PopulatePlanets(listOfPlanets);
             newSystem.PrimaryRingPlanet = ChoosePrimaryRingPlanet(listOfPlanets);
 
+            newSystem.Searched = false;
+
+            int discovered = Randomizer.GetRandomNumber(0, 2);
+            if (discovered == 0)
+                newSystem.Discovered = false;
+            else
+                newSystem.Discovered = true;
+
             return newSystem;
         }
 

@@ -23,7 +23,7 @@ namespace Starsphere.GameControl
         Screen currentScreen;
 
         OpeningScreen openWindow;
-        SphereControl gameWindow;
+        SphereControlScreen gameWindow;
 
         const string WINDOW_NAME = "Star Sphere 0.0.1";
 
@@ -51,7 +51,7 @@ namespace Starsphere.GameControl
 
 
             openWindow = new OpeningScreen(this);
-            gameWindow = new SphereControl(this);
+            gameWindow = new SphereControlScreen(this);
 
             currentScreen = openWindow;
             GameOptions.currentScreenVal = GameOptions.screens.openingWindow;
