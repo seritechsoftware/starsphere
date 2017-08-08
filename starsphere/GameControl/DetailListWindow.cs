@@ -21,6 +21,7 @@ namespace Starsphere.GameControl
 
         private StarSystem currentSystem;
         private StarSystem defaultSystemLevelDisplay;
+        private Planet currentPlanet;
 
         public DetailListWindow(WindowController wc, int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(wc, x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
         {
@@ -39,6 +40,7 @@ namespace Starsphere.GameControl
 
         public GameOptions.DetailMode DetailWindowMode { get { return currentDisplay; } set { currentDisplay = value; } }
         public StarSystem DisplaySystem { get { return currentSystem; } set { currentSystem = value; } }
+        public Planet DisplayPlanet {  get { return currentPlanet; } set { currentPlanet = value; } }
         public StarSystem DefaultSystem { get { return defaultSystemLevelDisplay; } }
 
         public override void MouseOver(MouseState mouseState)
@@ -106,7 +108,7 @@ namespace Starsphere.GameControl
 
             if (currentSystem.Discovered)
             {
-                PrintTextLines(spriteBatch, "Stellar Information Database",
+                PrintTextLines(spriteBatch, "Stellar Information Database", "",
                 "Star Name: " + currentSystem.Name,
                 "Type: " + currentSystem.Type.ToString(),
                 "Color: " + currentSystem.Color,
@@ -120,7 +122,7 @@ namespace Starsphere.GameControl
             }
             else
             {
-                PrintTextLines(spriteBatch, "Stellar Information Database",
+                PrintTextLines(spriteBatch, "Stellar Information Database", "",
                     "Star Name: " + currentSystem.Name,
                     "Type: " + currentSystem.Type.ToString(),
                     "Color: " + currentSystem.Color,
@@ -136,6 +138,23 @@ namespace Starsphere.GameControl
 
         private void DrawPlanetInfo(SpriteBatch spriteBatch)
         {
+            if (currentPlanet == null)
+            {
+                PrintTextLines(spriteBatch, "Planetary Information Database", "", "Awaiting Query");
+                return;
+            }
+
+            PrintTextLines(spriteBatch, "Planetary Information Database", "",
+                "Planet Name: " + currentPlanet.PlanetName,
+                "Star: " + currentPlanet.PlanetarySystem.Name,
+                "Size Class: " + currentPlanet.SizeOfPlanet.ToString(),
+                "Atmosphere: " + currentPlanet.Atmosphere.ToString(),
+                "Composition Type: " + currentPlanet.Composition.ToString(),
+                "EM Levels: " + currentPlanet.EMLevel.ToString(),
+                "",
+                "Average Orbital Radius: " + currentPlanet.OrbitRadius.ToString() + " Mkm",
+                "Number of Moons: " + currentPlanet.NumberOfMoons.ToString()
+                );
 
         }
 

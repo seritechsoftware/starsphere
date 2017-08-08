@@ -37,6 +37,11 @@ namespace Starsphere.GameControl
             detailList.DisplaySystem = newStar;
         }
 
+        public void ChangeDetailSystem(Planet newPlanet)
+        {
+            detailList.DisplayPlanet = newPlanet;
+        }
+
         public void ChangeViewScreenWindow(int buttonNum)
         {
             //button num is the numerical button val from the control panel, starting at 0
@@ -54,6 +59,7 @@ namespace Starsphere.GameControl
                     {
                         detailList.DisplaySystem = detailList.DefaultSystem;
                     }
+                    viewScreen.BuildPlanetCoords();
                     viewScreen.ViewScreenMode = GameOptions.DisplayMode.systemView;
                     break;
                 case 2:

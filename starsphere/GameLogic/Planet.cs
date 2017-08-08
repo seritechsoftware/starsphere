@@ -19,15 +19,17 @@ namespace Starsphere.GameLogic
         private Types.EmLevel emLevel;
 
         private int orbitalRadius; //Measured in millions of km from star (avg. radius)
-        private int orbitalNum;
+        private int orbitalNum; //Starts at One
         private string name;
         private int numMoons;
         private StarSystem system;
 
         private Color color;
+        private bool searched;
 
         public List<PlanetZone> zones;
         public PlanetZone ringZone;
+        private bool hasGalacticRing;
 
         public Planet(Types.PlanetSize planetSize, Types.PlanetComp planetComp, Types.Atmosphere planetAtmos, Types.Climate planetClim, Types.EmLevel planetEM,
                         int orbitSize, int orbitNum, int numberOfMoons, string planetName, StarSystem currentSystem, Color planetColor)
@@ -45,6 +47,8 @@ namespace Starsphere.GameLogic
             system = currentSystem;
 
             color = planetColor;
+            searched = false;
+            hasGalacticRing = false;
 
             //Zones need to be added later
         }
@@ -63,6 +67,8 @@ namespace Starsphere.GameLogic
         public StarSystem PlanetarySystem { get { return system; } }
 
         public Color PlanetColor { get { return color; } }
+        public bool Searched { get { return searched; } set { searched = value; } }
+        public bool HasMainRing { get { return hasGalacticRing; } set { hasGalacticRing = value; } }
 
     }
 }

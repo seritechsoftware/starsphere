@@ -22,6 +22,8 @@ namespace Starsphere.GameControl
         //Game Logic Variables
         private Galaxy currentGalaxy;
         private StarSystem selectedSystem;
+        private Planet selectedPlanet;
+        private List<Vector2> planetCoords;
 
         private int borderWidth = 32; //MAGIC NUMBER
         private int moveSpeed = 5; //MAGIC NUMBER
@@ -106,6 +108,7 @@ namespace Starsphere.GameControl
 
         public override void MouseClick(MouseState mouseState)
         {
+            Rectangle clickRect;
             switch (currentDisplay)
             {
                 case GameOptions.DisplayMode.blankView:
@@ -113,7 +116,7 @@ namespace Starsphere.GameControl
                     break;
                 case GameOptions.DisplayMode.galaxyView:
                     //Did they click a star system
-                    Rectangle clickRect = galaxyIcons.getIconRectangle(0, 0);
+                    clickRect = galaxyIcons.getIconRectangle(0, 0);
                     foreach (StarSystem s in currentGalaxy.systems)
                     {
                         //Check to see if in current viewing window. 
@@ -130,6 +133,7 @@ namespace Starsphere.GameControl
                                 selectedSystem = s;
 
                                 //Display SelectedStar
+                                selectedPlanet = null;
                                 WindowCon.ChangeDetailListMode(GameOptions.DetailMode.starInfo);
                                 WindowCon.ChangeDetailStar(selectedSystem);
                             }
@@ -138,7 +142,29 @@ namespace Starsphere.GameControl
                     }
                     break;
                 case GameOptions.DisplayMode.systemView:
+                    //Did they click a planet?
+                    clickRect = galaxyIcons.getIconRectangle(0, 0);
+                    int i = 0;
+                    bool planetClicked = false;
+                    foreach (Vector2 v in planetCoords)
+                    {
+                        clickRect.Location = v.ToPoint();
+                        if (clickRect.Contains(mouseState.Position))
+                        {
+                            selectedPlanet = selectedSystem.planets[i];
+                            WindowCon.ChangeDetailListMode(GameOptions.DetailMode.planetInfo);
+                            WindowCon.ChangeDetailSystem(selectedPlanet);
+                            planetClicked = true;
+                        }
 
+                        i++;
+                    }
+
+                    if(!planetClicked)
+                    {
+                        selectedPlanet = null;
+                        WindowCon.ChangeDetailListMode(GameOptions.DetailMode.starInfo);
+                    }
                     break;
                 case GameOptions.DisplayMode.baseView:
 
@@ -272,6 +298,36 @@ namespace Starsphere.GameControl
             return sourceRect;
         }
 
+
+        public void BuildPlanetCoords()
+        {
+            if (selectedSystem.Discovered)
+            {
+                if (selectedSystem.NumberOfPlanets != 0)
+                {
+                    Rectangle sourceRect = GetSystemViewStarType(selectedSystem.Type);
+                    Vector2 center = new Vector2(systemViewWindow.Left, (int)(systemViewWindow.Height / 2));
+                    IEnumerable<Planet> order = selectedSystem.planets.OrderBy(planet => planet.OrbitalNumber);
+                    int maxOrbit = order.Last().OrbitRadius;
+
+                    planetCoords = new List<Vector2>(selectedSystem.NumberOfPlanets);
+
+                    int previousEnd = sourceRect.Width;
+                    foreach (Planet p in order)
+                    {
+                        int radius = (int)(((systemViewWindow.Width - center.X) / maxOrbit) * p.OrbitRadius);
+                        if (radius < previousEnd)
+                            radius = previousEnd;
+                        sourceRect = GetPlanetType(p.SizeOfPlanet);
+                        planetCoords.Insert(p.OrbitalNumber - 1, new Vector2(center.X + radius, center.Y));
+                        previousEnd = radius + sourceRect.Width;
+                    }
+                }
+            }
+
+        }
+
+
         private void DrawSystemView(SpriteBatch spriteBatch)
         {
             base.backgroundColor = Color.Black;
@@ -292,18 +348,16 @@ namespace Starsphere.GameControl
             {
                 if (selectedSystem.NumberOfPlanets != 0)
                 {
-                    IEnumerable<Planet> order = selectedSystem.planets.OrderBy(planet => planet.OrbitalNumber);
-                    int maxOrbit = order.Last().OrbitRadius;
-
-                    int previousEnd = sourceRect.Width;
-                    foreach (Planet p in order)
+                    foreach (Planet p in selectedSystem.planets)
                     {
-                        int radius = (int)(((systemViewWindow.Width - center.X) / maxOrbit) * p.OrbitRadius);
-                        if (radius < previousEnd)
-                            radius = previousEnd;
                         sourceRect = GetPlanetType(p.SizeOfPlanet);
-                        spriteBatch.Draw(galaxyIcons.iconTexture, new Vector2(center.X + radius, center.Y), sourceRect, p.PlanetColor);
-                        previousEnd = radius + sourceRect.Width;
+                        spriteBatch.Draw(galaxyIcons.iconTexture, planetCoords[p.OrbitalNumber - 1], sourceRect, p.PlanetColor);
+
+                        if (selectedPlanet != null && selectedPlanet.OrbitalNumber == p.OrbitalNumber)
+                        {
+                            sourceRect = galaxyIcons.getIconRectangle(0, 1);
+                            spriteBatch.Draw(galaxyIcons.iconTexture, planetCoords[p.OrbitalNumber - 1], sourceRect, Color.White); 
+                        }
                     }
                 }
             }

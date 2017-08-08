@@ -208,8 +208,12 @@ namespace Starsphere.GameLogic
 
             if (num > 0)
             {
-                int randomNum = Randomizer.GetRandomNumber(1, num);
-                return planets.ElementAt(randomNum - 1);
+                int randomNum = Randomizer.GetRandomNumber(0, num);
+                Planet returnPlanet = planets.ElementAt(randomNum);
+                returnPlanet.HasMainRing = true;
+                randomNum = Randomizer.GetRandomNumber(0, returnPlanet.zones.Count);
+                returnPlanet.ringZone = returnPlanet.zones.ElementAt(randomNum);
+                return returnPlanet;
             }
             else
             {
@@ -230,11 +234,13 @@ namespace Starsphere.GameLogic
             newP = new Planet(Types.PlanetSize.SEClass, Types.PlanetComp.Solid, Types.Atmosphere.None, Types.Climate.Arid, Types.EmLevel.High, 60, 1, 0, "Mercury", sol, Color.Red);
             newP.zones = new List<PlanetZone>();
             newP.zones.Add(new PlanetZone(Types.Biome.Desert, new List<Resource>() , newP));
+            newP.Searched = true;
             sol.planets.Add(newP);
             //Venus
             newP = new Planet(Types.PlanetSize.EClass, Types.PlanetComp.MoltenCore, Types.Atmosphere.CarbonDioxide, Types.Climate.Humid, Types.EmLevel.Medium, 105, 2, 0, "Venus", sol, Color.Yellow);
             newP.zones = new List<PlanetZone>();
             newP.zones.Add(new PlanetZone(Types.Biome.Desert, new List<Resource>(), newP));
+            newP.Searched = true;
             sol.planets.Add(newP);
             //Earth
             newP = new Planet(Types.PlanetSize.EClass, Types.PlanetComp.MoltenCore, Types.Atmosphere.OxygenNitrogen, Types.Climate.Temperate, Types.EmLevel.Low, 150, 3, 1, "Earth", sol, Color.Blue);
@@ -242,36 +248,46 @@ namespace Starsphere.GameLogic
             newP.zones.Add(new PlanetZone(Types.Biome.Grassland, new List<Resource>(), newP));
             newP.zones.Add(new PlanetZone(Types.Biome.Desert, new List<Resource>(), newP));
             newP.zones.Add(new PlanetZone(Types.Biome.Tundra, new List<Resource>(), newP));
+            newP.Searched = true;
             sol.planets.Add(newP);
             //Mars
             newP = new Planet(Types.PlanetSize.SEClass, Types.PlanetComp.Solid, Types.Atmosphere.Minor, Types.Climate.Arid, Types.EmLevel.High, 228, 4, 2, "Mars", sol, Color.Red);
             newP.zones = new List<PlanetZone>();
             newP.zones.Add(new PlanetZone(Types.Biome.Desert, new List<Resource>(), newP));
+            newP.Searched = true;
+            newP.HasMainRing = true;
+            newP.ringZone = newP.zones[0];
+            sol.PrimaryRingPlanet = newP;
             sol.planets.Add(newP);
             //Jupiter
             newP = new Planet(Types.PlanetSize.JClass, Types.PlanetComp.Gas, Types.Atmosphere.HydrogenHelium, Types.Climate.Storm, Types.EmLevel.High, 779, 5, 67, "Jupiter", sol, Color.Purple);
             newP.zones = new List<PlanetZone>();
             newP.zones.Add(new PlanetZone(Types.Biome.Desert, new List<Resource>(), newP));
+            newP.Searched = true;
             sol.planets.Add(newP);
             //Saturn
             newP = new Planet(Types.PlanetSize.JClass, Types.PlanetComp.Gas, Types.Atmosphere.HydrogenHelium, Types.Climate.Storm, Types.EmLevel.High, 1434, 6, 62, "Saturn", sol, Color.Orange);
             newP.zones = new List<PlanetZone>();
             newP.zones.Add(new PlanetZone(Types.Biome.Desert, new List<Resource>(), newP));
+            newP.Searched = true;
             sol.planets.Add(newP);
             //Uranus
             newP = new Planet(Types.PlanetSize.NClass, Types.PlanetComp.Gas, Types.Atmosphere.HydrogenHelium, Types.Climate.Storm, Types.EmLevel.Medium, 2873, 7, 27, "Uranus", sol, Color.MediumBlue);
             newP.zones = new List<PlanetZone>();
             newP.zones.Add(new PlanetZone(Types.Biome.Desert, new List<Resource>(), newP));
+            newP.Searched = true;
             sol.planets.Add(newP);
             //Neptune
             newP = new Planet(Types.PlanetSize.NClass, Types.PlanetComp.Gas, Types.Atmosphere.HydrogenHelium, Types.Climate.Storm, Types.EmLevel.Medium, 4495, 8, 14, "Neptune", sol, Color.Turquoise);
             newP.zones = new List<PlanetZone>();
             newP.zones.Add(new PlanetZone(Types.Biome.Desert, new List<Resource>(), newP));
+            newP.Searched = true;
             sol.planets.Add(newP);
             //Pluto            
             newP = new Planet(Types.PlanetSize.DwarfPlanet, Types.PlanetComp.RockIce, Types.Atmosphere.None, Types.Climate.Arid, Types.EmLevel.Low, 5906, 9, 5, "Pluto", sol, Color.Gray);
             newP.zones = new List<PlanetZone>();
             newP.zones.Add(new PlanetZone(Types.Biome.Desert, new List<Resource>(), newP));
+            newP.Searched = true;
             sol.planets.Add(newP);
 
             return sol;
