@@ -22,7 +22,6 @@ namespace Starsphere.GameControl
         public Color hoverColor;
         public Color backgroundColor;
         private Color defaultBackgroundColor;
-        private bool mouseOn;
 
         private WindowController winCon;
 
@@ -40,7 +39,6 @@ namespace Starsphere.GameControl
             hoverColor = Color.White;
             backgroundColor = new Color(127, 51, 0);
             defaultBackgroundColor = backgroundColor;
-            mouseOn = false;
 
             winCon = wc;
         }
@@ -89,7 +87,6 @@ namespace Starsphere.GameControl
         //Placeholders for the children class methods.
         public virtual void MouseOver(MouseState mouseState)
         {
-            mouseOn = true;
             hoverColor = Color.Green;
         }
 
@@ -107,7 +104,6 @@ namespace Starsphere.GameControl
 
         public virtual void MouseOff(MouseState mouseState)
         {
-            mouseOn = false;
             hoverColor = Color.White;
         }
 

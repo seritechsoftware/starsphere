@@ -144,6 +144,11 @@ namespace Starsphere.GameControl
                 return;
             }
 
+            string ringPresent = "";
+
+            if (currentPlanet.HasMainRing)
+                ringPresent = "Primary Ring Located on Planet";
+
             PrintTextLines(spriteBatch, "Planetary Information Database", "",
                 "Planet Name: " + currentPlanet.PlanetName,
                 "Star: " + currentPlanet.PlanetarySystem.Name,
@@ -153,7 +158,9 @@ namespace Starsphere.GameControl
                 "EM Levels: " + currentPlanet.EMLevel.ToString(),
                 "",
                 "Average Orbital Radius: " + currentPlanet.OrbitRadius.ToString() + " Mkm",
-                "Number of Moons: " + currentPlanet.NumberOfMoons.ToString()
+                "Number of Moons: " + currentPlanet.NumberOfMoons.ToString(),
+                "",
+                ringPresent
                 );
 
         }

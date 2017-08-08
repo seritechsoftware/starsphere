@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Starsphere.GameLogic
 {
-    public class SystemViewer
+    public class Personnel
     {
+        string name;
+
+        public Personnel(string unitName)
+        {
+            name = unitName;
+        }
     }
 }

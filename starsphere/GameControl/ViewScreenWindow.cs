@@ -16,8 +16,10 @@ namespace Starsphere.GameControl
         private GameOptions.DisplayMode currentDisplay;
         private SpriteFont detailFont;
         private IconHandler galaxyIcons;
+        private IconHandler baseIcons;
         private Rectangle galaxyViewWindow; //window that only shows a portion of the galaxy
         private Rectangle systemViewWindow; //window to show the star system
+        private Rectangle baseViewWindow; //window that only shows a portion of the base
 
         //Game Logic Variables
         private Galaxy currentGalaxy;
@@ -35,15 +37,17 @@ namespace Starsphere.GameControl
             currentDisplay = GameOptions.DisplayMode.blankView;
             galaxyViewWindow = new Rectangle(x, y, width, height);
             systemViewWindow = new Rectangle(x, y, width, height);
+            baseViewWindow = new Rectangle(x, y, width, height);
         }
 
-        public void LoadContent(Texture2D galaxyViewTextures, SpriteFont font, Galaxy gal)
+        public void LoadContent(Texture2D galaxyViewTextures, Texture2D baseViewTextures, SpriteFont font, Galaxy gal)
         {
             detailFont = font;
             currentGalaxy = gal;
             selectedSystem = currentGalaxy.Home;
 
             galaxyIcons = new IconHandler(galaxyViewTextures, 3, 6);
+            baseIcons = new IconHandler(baseViewTextures, 3, 6);
         }
 
 
@@ -394,7 +398,7 @@ namespace Starsphere.GameControl
 
         private void DrawBaseView(SpriteBatch spriteBatch)
         {
-            base.backgroundColor = Color.Black;
+            base.backgroundColor = Color.IndianRed;
         }
 
         private void DrawScienceView(SpriteBatch spriteBatch)

@@ -20,5 +20,6 @@ namespace Starsphere.GameLogic
         public enum NatResource { StrongMetal, RadioactiveMetal, HeavyWater, Flora, Fauna, HeavyMetal, Volatiles}
         public enum SynthResource { Alloys, NanoMaterials, Unobtanium, Antimatter}
         public enum EaseOfAccess { VeryEasy, Easy, Medium, Hard, VeryHard}
+        public enum Species { Human}
     }
 }

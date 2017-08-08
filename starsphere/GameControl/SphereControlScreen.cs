@@ -36,9 +36,8 @@ namespace Starsphere.GameControl
 
         //Game Logic Classes
         Galaxy galaxy;
-        int galaxyWidth = 5000; //MAGIC NUMBER
-        int galaxyHeight = 5000; //MAGIC NUMBER
-        int numberOfSystems = 100; //MAGIC NUMBER
+
+        List<BaseBuilding> buildings; 
 
         //Control Variables
         bool leftClickTrigger = false;
@@ -85,8 +84,10 @@ namespace Starsphere.GameControl
         public void LoadContent(ContentManager Content)
         {
             //Load Game Logic
-            galaxy = new Galaxy(galaxyWidth, galaxyHeight, numberOfSystems);
+            galaxy = new Galaxy(GameProperties.galaxyWidth, GameProperties.galaxyHeight, GameProperties.numberOfSystems);
 
+            buildings = new List<BaseBuilding>();
+            AddDefaultBuildings();
 
             //---------------------------------------------------------------------
 
@@ -118,7 +119,8 @@ namespace Starsphere.GameControl
 
             //Load View Screen Window Textures
             Texture2D galaxyViewScreenTex = Content.Load<Texture2D>("galaxyviewtiles");
-            viewScreen.LoadContent(galaxyViewScreenTex, detailFont, galaxy);
+            Texture2D baseViewScreenTex = Content.Load<Texture2D>("basetiles");
+            viewScreen.LoadContent(galaxyViewScreenTex, baseViewScreenTex, detailFont, galaxy);
 
             //Connect Window Controller
             winCon.Initialize(viewScreen, scheduleList, detailList, mainControls);
@@ -217,6 +219,24 @@ namespace Starsphere.GameControl
             detailList.Draw(spriteBatch);
             scheduleList.Draw(spriteBatch);
             mainControls.Draw(spriteBatch);
+        }
+
+        ///<summary>
+        ///Adds the default buildings to the global building list
+        ///</summary>
+        private void AddDefaultBuildings()
+        {
+            int defaultSpacing = 200;
+            RingBuilding ringDome = new RingBuilding(GameProperties.BaseWidth / 2, GameProperties.BaseHeight / 2);
+            ControlBuilding controlDome = new ControlBuilding(ringDome.XCoord, ringDome.YCoord + defaultSpacing);
+            GeneratorBuilding genDome = new GeneratorBuilding(ringDome.XCoord - defaultSpacing, ringDome.YCoord - defaultSpacing);
+
+            ringDome.Connect(controlDome);
+            controlDome.Connect(genDome);
+
+            buildings.Add(ringDome);
+            buildings.Add(controlDome);
+            buildings.Add(genDome);
         }
     }
 }
