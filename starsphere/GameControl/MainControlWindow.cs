@@ -74,6 +74,9 @@ namespace Starsphere.GameControl
         public override void MouseDown(MouseState mouseState)
         {
             buttonClickedNum = GetButtonNum(mouseState.X, mouseState.Y);
+
+            //Controls are switched on mouse down, not on click
+            WindowCon.ChangeViewScreenWindow(buttonClickedNum);
         }
 
         public override void MouseUp(MouseState mouseState)
@@ -88,7 +91,7 @@ namespace Starsphere.GameControl
 
         public override void MouseClick(MouseState mouseState)
         {
-
+            
         }
 
         public new void Draw(SpriteBatch spriteBatch)

@@ -36,5 +36,43 @@ namespace Starsphere.GameControl
         {
             detailList.DisplaySystem = newStar;
         }
+
+        public void ChangeViewScreenWindow(int buttonNum)
+        {
+            //button num is the numerical button val from the control panel, starting at 0
+            //MAGIC NUMBER TIME
+            switch (buttonNum)
+            {
+                case 0:
+                    //Galaxy View
+                    viewScreen.ViewScreenMode = GameOptions.DisplayMode.galaxyView;
+                    detailList.DetailWindowMode = GameOptions.DetailMode.starInfo;
+                    break;
+                case 1:
+                    //System View
+                    if (detailList.DisplaySystem == null)
+                    {
+                        detailList.DisplaySystem = detailList.DefaultSystem;
+                    }
+                    viewScreen.ViewScreenMode = GameOptions.DisplayMode.systemView;
+                    break;
+                case 2:
+                    //Base View
+                    viewScreen.ViewScreenMode = GameOptions.DisplayMode.baseView;
+                    break;
+                case 3:
+                    //Science View
+                    viewScreen.ViewScreenMode = GameOptions.DisplayMode.scienceView;
+                    break;
+                case 4:
+                    //Personnel View
+                    viewScreen.ViewScreenMode = GameOptions.DisplayMode.personnelView;
+                    break;
+                default:
+                    viewScreen.ViewScreenMode = GameOptions.DisplayMode.blankView;
+                    detailList.DetailWindowMode = GameOptions.DetailMode.blankInfo; 
+                    break;
+            }
+        }
     }
 }

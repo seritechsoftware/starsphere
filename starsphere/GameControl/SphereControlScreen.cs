@@ -114,7 +114,7 @@ namespace Starsphere.GameControl
 
             //Load Detail List Window Textures
             SpriteFont detailFont = Content.Load<SpriteFont>("detaillist");
-            detailList.LoadTexture(detailFont);
+            detailList.LoadTexture(detailFont, galaxy.Home);
 
             //Load View Screen Window Textures
             Texture2D galaxyViewScreenTex = Content.Load<Texture2D>("galaxyviewtiles");
@@ -123,7 +123,7 @@ namespace Starsphere.GameControl
             //Connect Window Controller
             winCon.Initialize(viewScreen, scheduleList, detailList, mainControls);
         }
-
+        
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// game-specific content.

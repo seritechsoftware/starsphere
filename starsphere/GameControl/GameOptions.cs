@@ -10,7 +10,7 @@ namespace Starsphere.GameControl
     {
         public enum screens { openingWindow, loadSphereControl, sphereControl}
         public enum DetailMode { blankInfo, starInfo, planetInfo}
-        public enum DisplayMode { blankView, galaxyView, systemView, planetView}
+        public enum DisplayMode { blankView, galaxyView, systemView, baseView, scienceView, personnelView}
         static public int screenHeight, screenWidth;
         static public screens currentScreenVal;
     }

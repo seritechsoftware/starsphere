@@ -9,6 +9,7 @@ namespace Starsphere.GameLogic
     public class Galaxy
     {
         public List<StarSystem> systems;
+        private StarSystem homeSystem;
         private int galacticWidth, galacticHeight;
 
         public Galaxy(int width, int height, int numberOfSystemsToGenerate)
@@ -22,9 +23,13 @@ namespace Starsphere.GameLogic
                 //Generate random system
                 systems.Add(GalacticGenerator.GenerateSystem(width, height));
             }
+
+            homeSystem = GalacticGenerator.CreateSol(width, height);
+            systems.Add(homeSystem);
         }
 
         public int Width { get { return galacticWidth; } }
         public int Height {  get { return galacticHeight; } }
+        public StarSystem Home {  get { return homeSystem; } }
     }
 }

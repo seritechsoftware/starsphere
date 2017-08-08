@@ -20,22 +20,26 @@ namespace Starsphere.GameControl
         private Color fontColor;
 
         private StarSystem currentSystem;
+        private StarSystem defaultSystemLevelDisplay;
 
         public DetailListWindow(WindowController wc, int x, int y, int width, int height, int borderWidth, Texture2D windowTexture, Texture2D horzBorderTexture, Texture2D vertBorderTexture) : base(wc, x, y, width, height, borderWidth, windowTexture, horzBorderTexture, vertBorderTexture)
         {
             base.backgroundColor = Color.Black;
         }
 
-        public void LoadTexture(SpriteFont font)
+        public void LoadTexture(SpriteFont font, StarSystem defaultSystem)
         {
             currentDisplay = GameOptions.DetailMode.blankInfo;
             displayFont = font;
             displayCorner = new Vector2((float)Window.X + displayFont.LineSpacing, (float)Window.Y + displayFont.LineSpacing); //Give a little border to the writing.
             fontColor = Color.LightGreen;
+
+            defaultSystemLevelDisplay = defaultSystem;
         }
 
         public GameOptions.DetailMode DetailWindowMode { get { return currentDisplay; } set { currentDisplay = value; } }
         public StarSystem DisplaySystem { get { return currentSystem; } set { currentSystem = value; } }
+        public StarSystem DefaultSystem { get { return defaultSystemLevelDisplay; } }
 
         public override void MouseOver(MouseState mouseState)
         {
@@ -94,6 +98,12 @@ namespace Starsphere.GameControl
 
         private void DrawStarInfo(SpriteBatch spriteBatch)
         {
+            if (currentSystem == null)
+            {
+                PrintTextLines(spriteBatch, "Stellar Information Database", "", "Awaiting Query");
+                return;
+            }
+
             if (currentSystem.Discovered)
             {
                 PrintTextLines(spriteBatch, "Stellar Information Database",
@@ -118,8 +128,7 @@ namespace Starsphere.GameControl
                     "Radius Size: Unknown",
                     "Luminosity: Unknown",
                     "Galactic Coordinates: (" + currentSystem.XCoord + ", " + currentSystem.YCoord + ")",
-                    "Number of Planets: Unknown",
-                    "System Searched: " + currentSystem.Searched.ToString()
+                    "Number of Planets: Unknown"
                     );
                 }
             

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 namespace Starsphere.GameLogic
 {
@@ -20,11 +24,13 @@ namespace Starsphere.GameLogic
         private int numMoons;
         private StarSystem system;
 
+        private Color color;
+
         public List<PlanetZone> zones;
         public PlanetZone ringZone;
 
         public Planet(Types.PlanetSize planetSize, Types.PlanetComp planetComp, Types.Atmosphere planetAtmos, Types.Climate planetClim, Types.EmLevel planetEM,
-                        int orbitSize, int orbitNum, int numberOfMoons, string planetName, StarSystem currentSystem)
+                        int orbitSize, int orbitNum, int numberOfMoons, string planetName, StarSystem currentSystem, Color planetColor)
         {
             size = planetSize;
             atmosphere = planetAtmos;
@@ -37,6 +43,8 @@ namespace Starsphere.GameLogic
             numMoons = numberOfMoons;
             name = planetName;
             system = currentSystem;
+
+            color = planetColor;
 
             //Zones need to be added later
         }
@@ -53,6 +61,8 @@ namespace Starsphere.GameLogic
         public string PlanetName {  get { return name; } }
         public int NumberOfMoons { get { return numMoons; } }
         public StarSystem PlanetarySystem { get { return system; } }
+
+        public Color PlanetColor { get { return color; } }
 
     }
 }
